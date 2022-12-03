@@ -2,7 +2,7 @@
 #include <iostream>
 #include "BigInt.h"
 
-void BigInt::removeZero() {
+void BigInt::RemoveZero() {
     int index = 0;
 
     while (this->val[index] == '0') {
@@ -61,7 +61,7 @@ BigInt::BigInt(std::string str) {
         }
     }
     this->val = str.substr(begining, size-begining);
-    this->removeZero();
+    this->RemoveZero();
     if (this->val == "0") {
         is_neg = false;
     }
@@ -75,6 +75,55 @@ BigInt::BigInt(const BigInt& i) {
 BigInt::~BigInt() {
     
 }
+
+BigInt& BigInt::operator=(const BigInt& a) {
+    if (this == &a) {
+        return (*this);
+    }
+    this->is_neg = a.is_neg;
+    this->val = a.val;
+    return *this;
+}
+
+//BigInt operator~() const;  // const  конце - внутри метода не можем менять члены класса
+
+//BigInt& operator++();
+//const BigInt operator++(int) const;
+//BigInt& operator--();
+//const BigInt operator--(int) const;
+
+//BigInt& operator+=(const BigInt&);
+//BigInt& operator*=(const BigInt&);
+//BigInt& operator-=(const BigInt&);
+//BigInt& operator/=(const BigInt&);
+//BigInt& operator^=(const BigInt&);
+//BigInt& operator%=(const BigInt&);
+//BigInt& operator&=(const BigInt&);
+//BigInt& operator|=(const BigInt&);
+
+//BigInt operator+() const;  // unary +
+//BigInt operator-() const;  // unary -
+
+//bool operator==(const BigInt&) const;
+//bool operator!=(const BigInt&) const;
+//bool operator<(const BigInt&) const;
+//bool operator>(const BigInt&) const;
+//bool operator<=(const BigInt&) const;
+//bool operator>=(const BigInt&) const;
+
+//operator int() const;
+//operator std::string() const;
+
+//size_t size() const;  // size in bytes
+
+//BigInt operator+(const BigInt&, const BigInt&);
+//BigInt operator-(const BigInt&, const BigInt&);
+//BigInt operator*(const BigInt&, const BigInt&);
+//BigInt operator/(const BigInt&, const BigInt&);
+//BigInt operator^(const BigInt&, const BigInt&);
+//BigInt operator%(const BigInt&, const BigInt&);
+//BigInt operator&(const BigInt&, const BigInt&);
+//BigInt operator|(const BigInt&, const BigInt&);
 
 BigInt::operator std::string() const {
     std::string result;

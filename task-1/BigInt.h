@@ -4,7 +4,7 @@ class BigInt {
     bool is_neg = false;
     std::string val = "";
 private:
-    void removeZero();
+    void RemoveZero();
     void ReverseVal();
 public:
     BigInt();
