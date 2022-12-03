@@ -1,12 +1,11 @@
-//
-// Created by Alex on 14.09.2022.
-//
-
-#ifndef INC_21202_BIRYUKOV_OOP_CPP_BIGINT_H
-#define INC_21202_BIRYUKOV_OOP_CPP_BIGINT_H  // todo: че это блин
-
+#include <string>
 
 class BigInt {
+    bool is_neg = false;
+    std::string val = "";
+private:
+    void removeZero();
+    void ReverseVal();
 public:
     BigInt();
     BigInt(int);
@@ -51,6 +50,8 @@ public:
     operator std::string() const;
 
     size_t size() const;  // size in bytes
+
+    friend std::ostream& operator<<(std::ostream& o, const BigInt& i);
 };
 
 BigInt operator+(const BigInt&, const BigInt&);
@@ -74,5 +75,3 @@ std::ostream& operator<<(std::ostream& o, const BigInt& i);
  *     ASSwhat?_EQ(444, n1+n2);
  * }
  */
-
-#endif //INC_21202_BIRYUKOV_OOP_CPP_BIGINT_H
