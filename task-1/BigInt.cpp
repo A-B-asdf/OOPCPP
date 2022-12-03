@@ -76,7 +76,14 @@ BigInt::~BigInt() {
     
 }
 
-
+BigInt::operator std::string() const {
+    std::string result;
+    if (this->is_neg) {
+        result += '-';
+    }
+    result += this->val;
+    return result;
+}
 
 std::ostream& operator<<(std::ostream& o, const BigInt& i) {
 
