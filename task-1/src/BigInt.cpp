@@ -121,7 +121,25 @@ bool BigInt::operator!=(const BigInt& i) const { //
     return (*this == i) ? false : true;
 }
 
-//bool operator<(const BigInt&) const;
+bool BigInt::operator<(const BigInt& i) const {
+    if (this->is_neg != i.is_neg) {  //
+        return (this->is_neg) ? true : false;
+    }
+    if (this->val.size() != i.val.size()) {  //
+        return (this->is_neg) ? 
+            (this->val.size() > i.val.size()) : 
+            (this->val.size() < i.val.size());
+    }
+    for (size_t index = 0; index < this->val.size(); ++index) {
+        if (this->val[index] != i.val[index]) {
+            return (this->is_neg) ? 
+                this->val[index] > i.val[index] :
+                this->val[index] < i.val[index];
+        }
+    }
+    return false;
+}
+
 //bool operator>(const BigInt&) const;
 //bool operator<=(const BigInt&) const;
 //bool operator>=(const BigInt&) const;

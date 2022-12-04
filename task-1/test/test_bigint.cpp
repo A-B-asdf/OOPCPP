@@ -103,3 +103,50 @@ TEST(operator_assignment, ABC) {
     ASSERT_EQ(A, C);
 }
 
+/*
+TEST(operator_plus, ok) {
+    BigInt A = BigInt(-123);
+    A = A + A;
+    ASSERT_EQ(A, BigInt(-123 * 2));
+}
+*/
+
+TEST(operator_l, diffneg) {
+    BigInt A = BigInt(-1), B = BigInt(1);
+    ASSERT_EQ(A < B, true);
+    ASSERT_EQ(B < A, false);
+}
+
+TEST(operator_l, eq_pos) {
+    BigInt A = BigInt(1), B = BigInt(1);
+    ASSERT_EQ(A < B, false);
+}
+
+TEST(operator_l, eq_neg) {
+    BigInt A = BigInt(-1), B = BigInt(-1);
+    ASSERT_EQ(A < B, false);
+}
+
+TEST(operator_l, difsize_pos) {
+    BigInt A = BigInt(1234), B = BigInt(12345);
+    ASSERT_EQ(A < B, true);
+    ASSERT_EQ(B < A, false);
+}
+
+TEST(operator_l, difsize_neg) {
+    BigInt A = BigInt(-1234), B = BigInt(-12345);
+    ASSERT_EQ(A < B, false);
+    ASSERT_EQ(B < A, true);
+}
+
+TEST(operator_l, eqsize_pos) {
+    BigInt A = BigInt(1234), B = BigInt(1240);
+    ASSERT_EQ(A < B, true);
+    ASSERT_EQ(B < A, false);
+}
+
+TEST(operator_l, eqsize_neg) {
+    BigInt A = BigInt(-1234), B = BigInt(-1240);
+    ASSERT_EQ(A < B, false);
+    ASSERT_EQ(B < A, true);
+}
