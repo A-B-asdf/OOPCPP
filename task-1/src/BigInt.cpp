@@ -96,14 +96,45 @@ BigInt& BigInt::operator=(const BigInt& a) {  //
 //BigInt& operator--();
 //const BigInt operator--(int) const;
 
-//BigInt& operator+=(const BigInt&);
-//BigInt& operator*=(const BigInt&);
-//BigInt& operator-=(const BigInt&);
-//BigInt& operator/=(const BigInt&);
-//BigInt& operator^=(const BigInt&);
-//BigInt& operator%=(const BigInt&);
-//BigInt& operator&=(const BigInt&);
-//BigInt& operator|=(const BigInt&);
+BigInt& BigInt::operator+=(const BigInt& a) {
+    if (this->is_neg == a.is_neg) {
+        BigInt result = BigInt();
+        result.val = "";
+        result.is_neg = this->is_neg;
+        size_t index1 = this->val.size() - 1;
+        size_t index2 = a.val.size() - 1;
+        int carry = 0;
+        while (index1 + 1 || index2 + 1 || carry) {
+            int tmp = 0;
+            if (index1 + 1) {
+                tmp += (int) this->val[index1] - '0';
+                --index1;
+            }
+            if (index2 + 1) {
+                tmp += (int) a.val[index2] - '0';
+                --index2;
+            }
+            tmp += carry;
+            std::cout << carry << '\n';
+            result.val.insert(0, 1, (char) tmp % 10 + '0');
+            carry = tmp / 10;
+
+        }
+        *this = result;
+        return *this;        
+    }
+    else {
+        //*this -= i;
+        return *this;
+    }
+}
+//BigInt& BigInt::operator*=(const BigInt&);
+//BigInt& BigInt::operator-=(const BigInt&);
+//BigInt& BigInt::operator/=(const BigInt&);
+//BigInt& BigInt::operator^=(const BigInt&);
+//BigInt& BigInt::operator%=(const BigInt&);
+//BigInt& BigInt::operator&=(const BigInt&);
+//BigInt& BigInt::operator|=(const BigInt&);
 
 //BigInt operator+() const;  // unary +
 //BigInt operator-() const;  // unary -

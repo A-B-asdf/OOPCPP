@@ -191,3 +191,11 @@ TEST(operator_int, neg) {
     ASSERT_EQ((int) A, -1234);
 }
 
+TEST(operator_plus_eq, zxc) {
+    int a = 1234, b = 123456;
+    BigInt A = BigInt(a), B = BigInt(b);
+    A += B;
+    B += A;
+    ASSERT_EQ(A, BigInt(a + b));
+    ASSERT_EQ(B, BigInt(a + b + b));
+}
