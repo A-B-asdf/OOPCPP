@@ -152,8 +152,18 @@ bool BigInt::operator>=(const BigInt& i) const { //
     return !(*this < i);
 }
 
-//operator int() const;
-//operator std::string() const;
+BigInt::operator int() const {
+    return (! this->is_neg) ? std::stoi(this->val) : -std::stoi(this->val);
+}
+
+BigInt::operator std::string() const {
+    std::string result;
+    if (this->is_neg) {
+        result += '-';
+    }
+    result += this->val;
+    return result;
+}
 
 //size_t size() const;  // size in bytes
 
@@ -165,15 +175,6 @@ bool BigInt::operator>=(const BigInt& i) const { //
 //BigInt operator%(const BigInt&, const BigInt&);
 //BigInt operator&(const BigInt&, const BigInt&);
 //BigInt operator|(const BigInt&, const BigInt&);
-
-BigInt::operator std::string() const {
-    std::string result;
-    if (this->is_neg) {
-        result += '-';
-    }
-    result += this->val;
-    return result;
-}
 
 std::ostream& operator<<(std::ostream& o, const BigInt& i) {
 

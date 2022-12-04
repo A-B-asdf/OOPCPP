@@ -181,5 +181,13 @@ TEST(operator_ge, e) {
     ASSERT_EQ(B >= A, true);
 }
 
+TEST(operator_int, pos) {
+    BigInt A = BigInt(1234);
+    ASSERT_EQ((int) A, 1234);
+}
 
+TEST(operator_int, neg) {
+    BigInt A = BigInt(-1234);
+    ASSERT_EQ((int) A, -1234);
+}
 
