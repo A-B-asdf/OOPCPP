@@ -140,9 +140,17 @@ bool BigInt::operator<(const BigInt& i) const {
     return false;
 }
 
-//bool operator>(const BigInt&) const;
-//bool operator<=(const BigInt&) const;
-//bool operator>=(const BigInt&) const;
+bool BigInt::operator>(const BigInt& i) const { //
+    return i < *this;
+}
+
+bool BigInt::operator<=(const BigInt& i) const { //
+    return *this == i || *this < i;
+}
+
+bool BigInt::operator>=(const BigInt& i) const { //
+    return !(*this < i);
+}
 
 //operator int() const;
 //operator std::string() const;

@@ -150,3 +150,36 @@ TEST(operator_l, eqsize_neg) {
     ASSERT_EQ(A < B, false);
     ASSERT_EQ(B < A, true);
 }
+
+TEST(operator_g, diffneg) {
+    BigInt A = BigInt(1), B = BigInt(-1);
+    ASSERT_EQ(A > B, true);
+    ASSERT_EQ(B > A, false);
+}
+
+TEST(operator_le, l) {
+    BigInt A = BigInt(-1), B = BigInt(1);
+    ASSERT_EQ(A <= B, true);
+    ASSERT_EQ(B <= A, false);
+}
+
+TEST(operator_le, e) {
+    BigInt A = BigInt(1), B = BigInt(1);
+    ASSERT_EQ(A <= B, true);
+    ASSERT_EQ(B <= A, true);
+}
+
+TEST(operator_ge, g) {
+    BigInt B = BigInt(-1), A = BigInt(1);
+    ASSERT_EQ(A >= B, true);
+    ASSERT_EQ(B >= A, false);
+}
+
+TEST(operator_ge, e) {
+    BigInt B = BigInt(1), A = BigInt(1);
+    ASSERT_EQ(A >= B, true);
+    ASSERT_EQ(B >= A, true);
+}
+
+
+
