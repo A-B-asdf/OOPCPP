@@ -2,72 +2,76 @@
 #include <iostream>
 #include "BigInt.h"
 
-void BigInt::RemoveZero() {
-    int index = 0;
+void BigInt::RemoveZero() { //*
+    size_t index = 0;
 
     while (this->val[index] == '0') {
-        ++index;
+        ++index; //
     }
     if (index == this->val.size()) {
-        this->val = "0";
+        this->val = "0"; //
     }
     else {
-        this->val = this->val.substr(index, this->val.size() - index);
+        this->val = this->val.substr(index, this->val.size() - index); //
     }
 }
 
-void BigInt::ReverseVal() {
+void BigInt::ReverseVal() { // *
     size_t size = this->val.size()-1;
-    for (int i = 0; i < size / 2; ++i) {
+    for (size_t i = 0; i <= size / 2; ++i) {
         char c = this->val[i];
         this->val[i] = this->val[size - i];
         this->val[size - i] = c;
     }
 }
 
-BigInt::BigInt() {
+BigInt::BigInt() { //
     is_neg = false;
     this->val = "0";
 }
 
-BigInt::BigInt(int a) {
+BigInt::BigInt(int a) { //
 
-    if (a < 0) {
-        is_neg = true;
-        a = -a;
-    }
-    do {
-        int c = a % 10;
-        this->val += (char) (c + '0');
-        a /= 10;
-    } while(a > 0);
-    this->ReverseVal();
+    if (a < 0) { //
+        is_neg = true;  //
+        a = -a;  //
+    } //
+    do { //
+        int c = a % 10; //
+        this->val += (char) (c + '0'); //
+        a /= 10; //
+    } while(a > 0); //
+    this->ReverseVal(); //
 }
 
-BigInt::BigInt(std::string str) {
-    size_t size = str.size();
+BigInt::BigInt(std::string str) { //
+    size_t size = str.size(); 
     char first = str[0];
-    int index = 0;
+    size_t index = 0;
     int begining = 0;
 
-    if (first == '-') {
+    if (size == 0) {
+        throw std::invalid_argument("NaN"); //
+    }
+
+    if (first == '-') { //
         is_neg = true;
         index = 1;
         begining = 1;
     }
-    for (; index < size; ++index) {
+    for (; index < size; ++index) { //
         if (str[index] < '0' || str[index] > '9') {
-            throw std::invalid_argument("NaN");
+            throw std::invalid_argument("NaN"); //
         }
     }
     this->val = str.substr(begining, size-begining);
-    this->RemoveZero();
-    if (this->val == "0") {
+    this->RemoveZero(); //
+    if (this->val == "0") { //
         is_neg = false;
     }
 }
 
-BigInt::BigInt(const BigInt& i) {
+BigInt::BigInt(const BigInt& i) { //
     this->is_neg = i.is_neg;
     this->val = i.val;
 }
@@ -76,7 +80,7 @@ BigInt::~BigInt() {
     
 }
 
-BigInt& BigInt::operator=(const BigInt& a) {
+BigInt& BigInt::operator=(const BigInt& a) {  //
     if (this == &a) {
         return (*this);
     }
@@ -104,8 +108,19 @@ BigInt& BigInt::operator=(const BigInt& a) {
 //BigInt operator+() const;  // unary +
 //BigInt operator-() const;  // unary -
 
-//bool operator==(const BigInt&) const;
-//bool operator!=(const BigInt&) const;
+bool BigInt::operator==(const BigInt& i) const { //
+    return 
+        (this->is_neg == i.is_neg && this->val == i.val) 
+        ? 
+        true 
+        : 
+        false; 
+}
+
+bool BigInt::operator!=(const BigInt& i) const { //
+    return (*this == i) ? false : true;
+}
+
 //bool operator<(const BigInt&) const;
 //bool operator>(const BigInt&) const;
 //bool operator<=(const BigInt&) const;
