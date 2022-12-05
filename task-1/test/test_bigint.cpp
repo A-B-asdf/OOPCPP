@@ -325,4 +325,18 @@ TEST(operator_div, div_by_0) {
     EXPECT_ANY_THROW(A /= B);
 }
 
+TEST(operator_mod, zxc) {
+    int a = 100, b = 3;
+    BigInt A = BigInt(a), B = BigInt(b);
+    A %= B;
+    ASSERT_EQ(A, BigInt(a % b));
+    ASSERT_EQ(B, BigInt(b));
+}
+
+TEST(operator_mod, div_by_0) {
+    int a = 100, b = 0;
+    BigInt A = BigInt(a), B = BigInt(b);
+    EXPECT_ANY_THROW(A %= B);
+}
+
 

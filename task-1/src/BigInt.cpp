@@ -218,7 +218,20 @@ BigInt& BigInt::operator/=(const BigInt& divider) {
 }
 
 //BigInt& BigInt::operator^=(const BigInt&);
-//BigInt& BigInt::operator%=(const BigInt&);
+
+BigInt& BigInt::operator%=(const BigInt& divider) {
+    if (divider == BigInt()) {
+        throw std::runtime_error("Math error: Attempted to divide by Zero\n");
+    }
+    this->is_neg = 0;
+    BigInt divider_cp = divider;
+    divider_cp.is_neg = false;
+    while (*this >= divider_cp) {
+        *this -= divider_cp;
+    }
+    return *this;
+}
+
 //BigInt& BigInt::operator&=(const BigInt&);
 //BigInt& BigInt::operator|=(const BigInt&);
 
