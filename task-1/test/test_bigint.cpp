@@ -1,5 +1,6 @@
 #include "BigInt.cpp"
 #include <gtest/gtest.h>
+
 namespace {
     TEST(operator_equal, Self_positive) {
         BigInt A = BigInt(1234);
@@ -191,11 +192,91 @@ TEST(operator_int, neg) {
     ASSERT_EQ((int) A, -1234);
 }
 
-TEST(operator_plus_eq, zxc) {
+TEST(operator_plus_eq, is_neg_eq) {
+    // BigInt& BigInt::operator+=(const BigInt& a) case 1
     int a = 1234, b = 123456;
     BigInt A = BigInt(a), B = BigInt(b);
     A += B;
     B += A;
     ASSERT_EQ(A, BigInt(a + b));
     ASSERT_EQ(B, BigInt(a + b + b));
+}
+
+TEST(operator_plus_eq, operator_minus_eq_is_neg_ne) {
+    int a = 1234, b = -123456;
+    BigInt A = BigInt(a), B = BigInt(b);
+    A += B;
+    B += A;
+    ASSERT_EQ(A, BigInt(a + b));
+    ASSERT_EQ(B, BigInt(a + b + b));
+}
+
+TEST(unary_plus, zxc) {
+    BigInt A = BigInt(1234), B;
+    B = +A;
+    ASSERT_EQ(B, A);
+}
+
+TEST(unary_minus, zxc) {
+    int a = 1234;
+    BigInt A = BigInt(a), B;
+    B = -A;
+    ASSERT_EQ(B, BigInt(-a));
+    ASSERT_EQ(A, BigInt(a));
+}
+
+TEST(operator_minus_eq, f_lower) {
+    int a = 1234, b = 123456;
+    BigInt A = BigInt(a), B = BigInt(b);
+    A -= B;
+    ASSERT_EQ(A, BigInt(a - b));
+    ASSERT_EQ(B, BigInt(B));
+}
+
+TEST(operator_minus_eq, f_upper) {
+    int a = 1234, b = 123456;
+    BigInt A = BigInt(a), B = BigInt(b);
+    B -= A;
+    ASSERT_EQ(B, BigInt(b - a));
+    ASSERT_EQ(A, BigInt(A));
+}
+
+TEST(operator_minus_eq, is_neg_dif) {
+    int a = 1234, b = -123456;
+    BigInt A = BigInt(a), B = BigInt(b);
+    B -= A;
+    ASSERT_EQ(B, BigInt(b - a));
+    ASSERT_EQ(A, BigInt(A));
+}
+
+TEST(operator_plusplus, zxc) {
+    int a = 1234;
+    BigInt A = BigInt(a), B;
+    B = A++;
+    ASSERT_EQ(A, BigInt(a + 1));
+    ASSERT_EQ(B, BigInt(a));
+}
+
+TEST(operator_minusminus, zxc) {
+    int a = 1234;
+    BigInt A = BigInt(a), B;
+    B = A--;
+    ASSERT_EQ(A, BigInt(a - 1));
+    ASSERT_EQ(B, BigInt(a));
+}
+
+TEST(operator_plusplus_int, zxc) {
+    int a = 1234;
+    BigInt A = BigInt(a), B;
+    B = ++A;
+    ASSERT_EQ(A, BigInt(a + 1));
+    ASSERT_EQ(B, BigInt(a + 1));
+}
+
+TEST(operator_minusminus_int, zxc) {
+    int a = 1234;
+    BigInt A = BigInt(a), B;
+    B = --A;
+    ASSERT_EQ(A, BigInt(a - 1));
+    ASSERT_EQ(B, BigInt(a - 1));
 }

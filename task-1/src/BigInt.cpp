@@ -91,10 +91,27 @@ BigInt& BigInt::operator=(const BigInt& a) {  //
 
 //BigInt operator~() const;  // const  конце - внутри метода не можем менять члены класса
 
-//BigInt& operator++();
-//const BigInt operator++(int) const;
-//BigInt& operator--();
-//const BigInt operator--(int) const;
+BigInt& BigInt::operator++() {
+    *this += 1;
+    return *this;
+}
+
+const BigInt BigInt::operator++(int) {
+    BigInt a = *this;
+    *this += 1;
+    return a;
+}
+
+BigInt& BigInt::operator--() {
+    *this -= 1;
+    return *this;
+}
+
+const BigInt BigInt::operator--(int) {
+    BigInt a = *this;
+    *this -= 1;
+    return a;
+}
 
 BigInt& BigInt::operator+=(const BigInt& a) {
     if (this->is_neg == a.is_neg) {
@@ -104,6 +121,7 @@ BigInt& BigInt::operator+=(const BigInt& a) {
         size_t index1 = this->val.size() - 1;
         size_t index2 = a.val.size() - 1;
         int carry = 0;
+
         while (index1 + 1 || index2 + 1 || carry) {
             int tmp = 0;
             if (index1 + 1) {
@@ -115,7 +133,6 @@ BigInt& BigInt::operator+=(const BigInt& a) {
                 --index2;
             }
             tmp += carry;
-            std::cout << carry << '\n';
             result.val.insert(0, 1, (char) tmp % 10 + '0');
             carry = tmp / 10;
 
@@ -124,20 +141,69 @@ BigInt& BigInt::operator+=(const BigInt& a) {
         return *this;        
     }
     else {
-        //*this -= i;
+        *this -= -a;
         return *this;
     }
 }
+
 //BigInt& BigInt::operator*=(const BigInt&);
-//BigInt& BigInt::operator-=(const BigInt&);
+
+BigInt& BigInt::operator-=(const BigInt& a) {
+    if (this->is_neg != a.is_neg) {
+        *this += -a;
+        return *this;
+    }
+    else if (this->val >= a.val) {
+        BigInt result = *this;
+        result.val = "";
+        result.is_neg = this->is_neg;
+        size_t index1 = this->val.size() - 1;
+        size_t index2 = a.val.size() - 1;
+        int borrow = 0;
+
+        while (index1 + 1 || borrow) {
+            int tmp = -borrow; borrow = 0; // todo
+            if (index1 + 1) {
+                tmp += (int) this->val[index1] - '0';
+                --index1;
+            }
+            if (index2 + 1) {
+                tmp -= (int) a.val[index2] - '0';
+                --index2;
+            }
+            if (tmp < 0) {
+                tmp += 10;
+                borrow = 1;
+            }
+            result.val.insert(0, 1, (char) tmp + '0');
+        }
+        *this = result;
+        return *this;        
+    }
+    else {
+        BigInt result = a;
+        result -= *this;
+        *this = -result;
+        return *this;
+    }
+}
+
 //BigInt& BigInt::operator/=(const BigInt&);
 //BigInt& BigInt::operator^=(const BigInt&);
 //BigInt& BigInt::operator%=(const BigInt&);
 //BigInt& BigInt::operator&=(const BigInt&);
 //BigInt& BigInt::operator|=(const BigInt&);
 
-//BigInt operator+() const;  // unary +
-//BigInt operator-() const;  // unary -
+BigInt BigInt::operator+() const {  // unary +
+    BigInt result = *this;
+    return result;
+}
+
+BigInt BigInt::operator-() const {  // unary -
+    BigInt result = *this;
+    result.is_neg = !this->is_neg;
+    return result;
+}
 
 bool BigInt::operator==(const BigInt& i) const { //
     return 
