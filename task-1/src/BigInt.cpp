@@ -305,17 +305,44 @@ BigInt::operator std::string() const {
 
 //size_t size() const;  // size in bytes
 
-//BigInt operator+(const BigInt&, const BigInt&);
-//BigInt operator-(const BigInt&, const BigInt&);
-//BigInt operator*(const BigInt&, const BigInt&);
-//BigInt operator/(const BigInt&, const BigInt&);
-//BigInt operator^(const BigInt&, const BigInt&);
-//BigInt operator%(const BigInt&, const BigInt&);
-//BigInt operator&(const BigInt&, const BigInt&);
-//BigInt operator|(const BigInt&, const BigInt&);
+BigInt BigInt::operator+(const BigInt& a) {
+    BigInt result = *this;
+    result += a;
+    return result;
+}
+
+BigInt BigInt::operator-(const BigInt& a) {
+    BigInt result = *this;
+    result -= a;
+    return result;
+}
+
+BigInt BigInt::operator*(const BigInt& a) {
+    BigInt result = *this;
+    result *= a;
+    return result;
+}
+
+BigInt BigInt::operator/(const BigInt& a) {
+    BigInt result = *this;
+    result /= a;
+    return result;
+}
+
+//BigInt BigInt::operator^(const BigInt& a) {}
+
+BigInt BigInt::operator%(const BigInt& a) {
+    BigInt result = *this;
+    result /= a;
+    return result;
+}
+
+//BigInt BigInt::operator&(const BigInt& a) {}
+
+//BigInt BigInt::operator|(const BigInt& a) {}
+
 
 std::ostream& operator<<(std::ostream& o, const BigInt& i) {
-
     if (i.is_neg) {
         o << '-';
     }

@@ -31,6 +31,15 @@ public:
     BigInt& operator&=(const BigInt&);
     BigInt& operator|=(const BigInt&);
 
+    BigInt operator+(const BigInt&);
+    BigInt operator-(const BigInt&);
+    BigInt operator*(const BigInt&);
+    BigInt operator/(const BigInt&);
+    BigInt operator^(const BigInt&);
+    BigInt operator%(const BigInt&);
+    BigInt operator&(const BigInt&);
+    BigInt operator|(const BigInt&);
+
     BigInt operator+() const;  // unary +
     BigInt operator-() const;  // unary -
 
@@ -48,15 +57,6 @@ public:
 
     friend std::ostream& operator<<(std::ostream& o, const BigInt& i);
 };
-
-BigInt operator+(const BigInt&, const BigInt&);
-BigInt operator-(const BigInt&, const BigInt&);
-BigInt operator*(const BigInt&, const BigInt&);
-BigInt operator/(const BigInt&, const BigInt&);
-BigInt operator^(const BigInt&, const BigInt&);
-BigInt operator%(const BigInt&, const BigInt&);
-BigInt operator&(const BigInt&, const BigInt&);
-BigInt operator|(const BigInt&, const BigInt&);
 
 
 std::ostream& operator<<(std::ostream& o, const BigInt& i);

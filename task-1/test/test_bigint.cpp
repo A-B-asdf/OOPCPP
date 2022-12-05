@@ -203,7 +203,7 @@ TEST(operator_plus_eq, is_neg_eq) {
     ASSERT_EQ(B, BigInt(a + b + b));
 }
 
-TEST(operator_plus_eq, operator_minus_eq_is_neg_ne) {
+TEST(operator_plus_eq, is_neg_ne) {
     int a = 1234, b = -123456;
     BigInt A = BigInt(a), B = BigInt(b);
     A += B;
@@ -281,7 +281,7 @@ TEST(operator_minusminus_int, zxc) {
     ASSERT_EQ(B, BigInt(a - 1));
 }
 
-TEST(operator_mul, pospos) {
+TEST(operator_mul_ass, pospos) {
     int a = 1234, b = 5432;
 
     BigInt A = BigInt(a), B = BigInt(b);
@@ -291,7 +291,7 @@ TEST(operator_mul, pospos) {
     ASSERT_EQ(B, BigInt(b * b));
 }
 
-TEST(operator_mul, negpos) {
+TEST(operator_mul_ass, negpos) {
     int a = -1234, b = 5432;
 
     BigInt A = BigInt(a), B = BigInt(b);
@@ -301,7 +301,7 @@ TEST(operator_mul, negpos) {
     ASSERT_EQ(B, BigInt(b * b));
 }
 
-TEST(operator_mul, negneg) {
+TEST(operator_mul_ass, negneg) {
     int a = -1234, b = -5432;
 
     BigInt A = BigInt(a), B = BigInt(b);
@@ -311,7 +311,7 @@ TEST(operator_mul, negneg) {
     ASSERT_EQ(B, BigInt(b * b));
 }
 
-TEST(operator_div, zxc) {
+TEST(operator_div_ass, zxc) {
     int a = 100, b = 3;
     BigInt A = BigInt(a), B = BigInt(b);
     A /= B;
@@ -319,13 +319,13 @@ TEST(operator_div, zxc) {
     ASSERT_EQ(B, BigInt(b));
 }
 
-TEST(operator_div, div_by_0) {
+TEST(operator_div_ass, div_by_0) {
     int a = 100, b = 0;
     BigInt A = BigInt(a), B = BigInt(b);
     EXPECT_ANY_THROW(A /= B);
 }
 
-TEST(operator_mod, zxc) {
+TEST(operator_mod_ass, zxc) {
     int a = 100, b = 3;
     BigInt A = BigInt(a), B = BigInt(b);
     A %= B;
@@ -333,10 +333,40 @@ TEST(operator_mod, zxc) {
     ASSERT_EQ(B, BigInt(b));
 }
 
-TEST(operator_mod, div_by_0) {
+TEST(operator_mod_ass, div_by_0) {
     int a = 100, b = 0;
     BigInt A = BigInt(a), B = BigInt(b);
     EXPECT_ANY_THROW(A %= B);
+}
+
+TEST(operator_plus, is_neg_eq) {
+    int a = 1234, b = 123456;
+    BigInt A = BigInt(a), B = BigInt(b);
+    A += B;
+    B += A;
+    ASSERT_EQ(A, BigInt(a + b));
+    ASSERT_EQ(B, BigInt(a + b + b));
+}
+
+TEST(operator_mul, zxc) {
+    int a = 1234, b = 123456;
+    BigInt A = BigInt(a), B = BigInt(b);
+    A *= B;
+    ASSERT_EQ(A, BigInt(a * b));
+}
+
+TEST(operator_div, zxc) {
+    int a = 1234, b = 123456;
+    BigInt A = BigInt(a), B = BigInt(b);
+    A /= B;
+    ASSERT_EQ(A, BigInt(a / b));
+}
+
+TEST(operator_mod, zxc) {
+    int a = 1234, b = 123456;
+    BigInt A = BigInt(a), B = BigInt(b);
+    A %= B;
+    ASSERT_EQ(A, BigInt(a % b));
 }
 
 
