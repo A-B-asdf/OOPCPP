@@ -146,7 +146,17 @@ BigInt& BigInt::operator+=(const BigInt& a) {
     }
 }
 
-//BigInt& BigInt::operator*=(const BigInt&);
+BigInt& BigInt::operator*=(const BigInt& a) {
+    BigInt this_cp = *this;
+    this_cp.is_neg = (this->is_neg != a.is_neg);
+    BigInt a_cp = a;
+    a_cp.is_neg = false;
+    *this = 0;
+    for (BigInt i = BigInt(); i < a_cp; ++i) {
+        *this += this_cp;
+    }
+    return *this;
+}
 
 BigInt& BigInt::operator-=(const BigInt& a) {
     if (this->is_neg != a.is_neg) {

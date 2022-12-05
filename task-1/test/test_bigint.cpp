@@ -280,3 +280,35 @@ TEST(operator_minusminus_int, zxc) {
     ASSERT_EQ(A, BigInt(a - 1));
     ASSERT_EQ(B, BigInt(a - 1));
 }
+
+TEST(operator_mul, pospos) {
+    int a = 1234, b = 5432;
+
+    BigInt A = BigInt(a), B = BigInt(b);
+    A *= B;
+    B *= B;
+    ASSERT_EQ(A, BigInt(a * b));
+    ASSERT_EQ(B, BigInt(b * b));
+}
+
+TEST(operator_mul, negpos) {
+    int a = -1234, b = 5432;
+
+    BigInt A = BigInt(a), B = BigInt(b);
+    A *= B;
+    B *= B;
+    ASSERT_EQ(A, BigInt(a * b));
+    ASSERT_EQ(B, BigInt(b * b));
+}
+
+TEST(operator_mul, negneg) {
+    int a = -1234, b = -5432;
+
+    BigInt A = BigInt(a), B = BigInt(b);
+    A *= B;
+    B *= B;
+    ASSERT_EQ(A, BigInt(a * b));
+    ASSERT_EQ(B, BigInt(b * b));
+}
+
+
