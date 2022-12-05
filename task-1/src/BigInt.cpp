@@ -163,7 +163,7 @@ BigInt& BigInt::operator-=(const BigInt& a) {
         *this += -a;
         return *this;
     }
-    else if (this->val >= a.val) {
+    else if (this->val.size() >= a.val.size() || (this->val.size() == a.val.size() && this->val >= a.val)) {
         BigInt result = *this;
         result.val = "";
         result.is_neg = this->is_neg;
@@ -186,6 +186,7 @@ BigInt& BigInt::operator-=(const BigInt& a) {
                 borrow = 1;
             }
             result.val.insert(0, 1, (char) tmp + '0');
+            result.RemoveZero();
         }
         *this = result;
         return *this;        
@@ -200,18 +201,18 @@ BigInt& BigInt::operator-=(const BigInt& a) {
 
 BigInt& BigInt::operator/=(const BigInt& divider) {
     if (divider == BigInt()) {
-        throw std::invalid_argument("NaN");
+        throw std::runtime_error("Math error: Attempted to divide by Zero\n");
     }
     BigInt result = BigInt();
-    result.is_neg = (this->is_neg != result.is_neg);
+    bool res_is_neg = (this->is_neg != divider.is_neg);
     this->is_neg = 0;
     BigInt divider_cp = divider;
     divider_cp.is_neg = false;
     while (*this >= divider_cp) {
         *this -= divider_cp;
         result += BigInt(1);
-        std::cout << result << ' ' << *this << '\n';
     }
+    result.is_neg = res_is_neg;
     *this = result;
     return *this;
 }

@@ -4,7 +4,7 @@
 cmake-build-*/
 task-1/CMakeFiles/
 
-task-*/googletest/
+task-*/googletest*
 task-*/lib/
 task-*/bin/
 task-*/cmake_install.cmake

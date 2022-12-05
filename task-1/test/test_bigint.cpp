@@ -1,5 +1,6 @@
 #include "BigInt.cpp"
 #include <gtest/gtest.h>
+#include <iostream>
 
 namespace {
     TEST(operator_equal, Self_positive) {
@@ -234,19 +235,18 @@ TEST(operator_minus_eq, f_lower) {
 }
 
 TEST(operator_minus_eq, f_upper) {
-    int a = 1234, b = 123456;
+    int a = 3, b = 100;
     BigInt A = BigInt(a), B = BigInt(b);
     B -= A;
-    ASSERT_EQ(A, BigInt(b - a));
-    ASSERT_EQ(B, BigInt(B));
+    ASSERT_EQ(B, BigInt(b - a));
+    ASSERT_EQ(A, BigInt(A));
 }
 
 TEST(operator_minus_eq, is_neg_dif) {
-    int a = 1234, b = 123456;
+    int a = 3, b = 100;
     BigInt A = BigInt(a), B = BigInt(b);
     A -= B;
-    ASSERT_EQ(B, BigInt(a-b));
-    ASSERT_EQ(A, BigInt(A));
+    ASSERT_EQ(A, BigInt(a-b));
 }
 
 TEST(operator_plusplus, zxc) {
@@ -313,11 +313,16 @@ TEST(operator_mul, negneg) {
 
 TEST(operator_div, zxc) {
     int a = 100, b = 3;
-
     BigInt A = BigInt(a), B = BigInt(b);
     A /= B;
     ASSERT_EQ(A, BigInt(a / b));
     ASSERT_EQ(B, BigInt(b));
+}
+
+TEST(operator_div, div_by_0) {
+    int a = 100, b = 0;
+    BigInt A = BigInt(a), B = BigInt(b);
+    EXPECT_ANY_THROW(A /= B);
 }
 
 
