@@ -2,7 +2,7 @@
 
 #include <gtest/gtest.h>
 #include <iostream>
-/*
+
 namespace {
     TEST(operator_equal, Self_positive) {
         BigInt A = BigInt(1234);
@@ -370,4 +370,3 @@ TEST(binary_xor, zxc) {
 }
 
 
-*/
