@@ -2,21 +2,21 @@
 #include <stdexcept>
 #include <iostream>
 
-void BigInt::RemoveZero() { //*
+void BigInt::RemoveZero() {
     size_t index = 0;
 
     while (this->val[index] == '0') {
-        ++index; //
+        ++index;
     }
     if (index == this->val.size()) {
-        this->val = "0"; //
+        this->val = "0";
     }
     else {
-        this->val = this->val.substr(index, this->val.size() - index); //
+        this->val = this->val.substr(index, this->val.size() - index);
     }
 }
 
-void BigInt::ReverseVal() { // *
+void BigInt::ReverseVal() {
     size_t size = this->val.size()-1;
     for (size_t i = 0; i <= size / 2; ++i) {
         char c = this->val[i];
@@ -115,62 +115,62 @@ void BigInt::BinaryBitOperation(const BigInt& a, char operation) {
     BigIntFromSignedBinary(str1);
 }
 
-BigInt::BigInt() { //
+BigInt::BigInt() {
     is_neg = false;
     this->val = "0";
 }
 
-BigInt::BigInt(int a) { //
+BigInt::BigInt(int a) {
 
-    if (a < 0) { //
-        is_neg = true;  //
-        a = -a;  //
-    } //
-    do { //
-        int c = a % 10; //
-        this->val += (char) (c + '0'); //
-        a /= 10; //
-    } while(a > 0); //
-    this->ReverseVal(); //
+    if (a < 0) { 
+        is_neg = true;  
+        a = -a;  
+    } 
+    do { 
+        int c = a % 10; 
+        this->val += (char) (c + '0'); 
+        a /= 10; 
+    } while(a > 0); 
+    this->ReverseVal(); 
 }
 
-BigInt::BigInt(std::string str) { //
+BigInt::BigInt(std::string str) { 
     size_t size = str.size(); 
     char first = str[0];
     size_t index = 0;
     int begining = 0;
 
     if (size == 0) {
-        throw std::invalid_argument("NaN"); //
+        throw std::invalid_argument("NaN"); 
     }
 
-    if (first == '-') { //
+    if (first == '-') { 
         is_neg = true;
         index = 1;
         begining = 1;
     }
-    for (; index < size; ++index) { //
+    for (; index < size; ++index) { 
         if (str[index] < '0' || str[index] > '9') {
-            throw std::invalid_argument("NaN"); //
+            throw std::invalid_argument("NaN"); 
         }
     }
     this->val = str.substr(begining, size-begining);
-    this->RemoveZero(); //
-    if (this->val == "0") { //
+    this->RemoveZero(); 
+    if (this->val == "0") { 
         is_neg = false;
     }
 }
 
-BigInt::BigInt(const BigInt& i) { //
+BigInt::BigInt(const BigInt& i) { 
     this->is_neg = i.is_neg;
     this->val = i.val;
 }
 
 BigInt::~BigInt() {
-    
+    ;
 }
 
-BigInt& BigInt::operator=(const BigInt& a) {  //
+BigInt& BigInt::operator=(const BigInt& a) {  
     if (this == &a) {
         return (*this);
     }
@@ -179,7 +179,13 @@ BigInt& BigInt::operator=(const BigInt& a) {  //
     return *this;
 }
 
-//BigInt operator~() const;  // const  конце - внутри метода не можем менять члены класса
+BigInt BigInt::operator~() const {
+    std::string str = ToBinaryString();
+    InvertString(str);
+    BigInt result = BigInt();
+    result.BigIntFromSignedBinary(str);
+    return result;
+}
 
 BigInt& BigInt::operator++() {
     *this += 1;
@@ -335,18 +341,18 @@ BigInt& BigInt::operator|=(const BigInt& a) {
     return *this;
 }
 
-BigInt BigInt::operator+() const {  // unary +
+BigInt BigInt::operator+() const {
     BigInt result = *this;
     return result;
 }
 
-BigInt BigInt::operator-() const {  // unary -
+BigInt BigInt::operator-() const {
     BigInt result = *this;
     result.is_neg = !this->is_neg;
     return result;
 }
 
-bool BigInt::operator==(const BigInt& i) const { //
+bool BigInt::operator==(const BigInt& i) const {
     return 
         (this->is_neg == i.is_neg && this->val == i.val) 
         ? 
@@ -355,15 +361,15 @@ bool BigInt::operator==(const BigInt& i) const { //
         false; 
 }
 
-bool BigInt::operator!=(const BigInt& i) const { //
+bool BigInt::operator!=(const BigInt& i) const {
     return (*this == i) ? false : true;
 }
 
 bool BigInt::operator<(const BigInt& i) const {
-    if (this->is_neg != i.is_neg) {  //
+    if (this->is_neg != i.is_neg) { 
         return (this->is_neg) ? true : false;
     }
-    if (this->val.size() != i.val.size()) {  //
+    if (this->val.size() != i.val.size()) {
         return (this->is_neg) ? 
             (this->val.size() > i.val.size()) : 
             (this->val.size() < i.val.size());
@@ -378,15 +384,15 @@ bool BigInt::operator<(const BigInt& i) const {
     return false;
 }
 
-bool BigInt::operator>(const BigInt& i) const { //
+bool BigInt::operator>(const BigInt& i) const {
     return i < *this;
 }
 
-bool BigInt::operator<=(const BigInt& i) const { //
+bool BigInt::operator<=(const BigInt& i) const {
     return *this == i || *this < i;
 }
 
-bool BigInt::operator>=(const BigInt& i) const { //
+bool BigInt::operator>=(const BigInt& i) const {
     return !(*this < i);
 }
 
@@ -403,7 +409,12 @@ BigInt::operator std::string() const {
     return result;
 }
 
-//size_t size() const;  // size in bytes
+size_t BigInt::size() const {
+    size_t size = 0;
+    size += this->val.size() + 1;
+    size += sizeof(this->is_neg);
+    return size;
+}
 
 BigInt BigInt::operator+(const BigInt& a) {
     BigInt result = *this;
@@ -429,7 +440,11 @@ BigInt BigInt::operator/(const BigInt& a) {
     return result;
 }
 
-//BigInt BigInt::operator^(const BigInt& a) {}
+BigInt BigInt::operator^(const BigInt& a) {
+    BigInt result = *this;
+    result ^= a;
+    return result;
+}
 
 BigInt BigInt::operator%(const BigInt& a) {
     BigInt result = *this;
@@ -437,9 +452,17 @@ BigInt BigInt::operator%(const BigInt& a) {
     return result;
 }
 
-//BigInt BigInt::operator&(const BigInt& a) {}
+BigInt BigInt::operator&(const BigInt& a) {
+    BigInt result = *this;
+    result &= a;
+    return result;
+}
 
-//BigInt BigInt::operator|(const BigInt& a) {}
+BigInt BigInt::operator|(const BigInt& a) {
+    BigInt result = *this;
+    result |= a;
+    return result;
+}
 
 std::ostream& operator<<(std::ostream& o, const BigInt& i) {
     if (i.is_neg) {
