@@ -11,3 +11,4 @@ task-*/cmake_install.cmake
 task-*/MakeFile
 task-*/CMakeCache.txt
 
+*_old
