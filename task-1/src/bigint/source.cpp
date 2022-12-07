@@ -121,7 +121,6 @@ BigInt::BigInt() {
 }
 
 BigInt::BigInt(int a) {
-
     if (a < 0) { 
         is_neg = true;  
         a = -a;  
@@ -171,11 +170,10 @@ BigInt::~BigInt() {
 }
 
 BigInt& BigInt::operator=(const BigInt& a) {  
-    if (this == &a) {
-        return (*this);
+    if (*this != a) {
+        this->is_neg = a.is_neg;
+        this->val = a.val;
     }
-    this->is_neg = a.is_neg;
-    this->val = a.val;
     return *this;
 }
 

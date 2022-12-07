@@ -3,13 +3,13 @@
 #include <gtest/gtest.h>
 #include <iostream>
 
-namespace {
-    TEST(operator_equal, Self_positive) {
+namespace equal {
+    TEST(operator_equal, self_positive) {
         BigInt A = BigInt(1234);
         ASSERT_EQ(A, A);
     }
 
-    TEST(operator_equal, Self_negative) {
+    TEST(operator_equal, self_negative) {
         BigInt A = BigInt(-1234);
         ASSERT_EQ(A, A);
     }
@@ -99,95 +99,106 @@ namespace Init {
     }
 }
 
-TEST(operator_assignment, ABC) {
-    BigInt A = BigInt(-1234), B, C;
-    B = C = A;
-    ASSERT_EQ(A, B);
-    ASSERT_EQ(A, C);
+namespace assignment {
+    TEST(operator_assignment, ABC) {
+        BigInt A = BigInt(-1234), B, C;
+        B = C = A;
+        ASSERT_EQ(A, B);
+        ASSERT_EQ(A, C);
+    }
+
+    TEST(operator_assignment, self) {
+        BigInt A = BigInt(-1234);
+        A = A;
+        ASSERT_EQ(A, A);
+    }
 }
 
-TEST(operator_l, diffneg) {
-    BigInt A = BigInt(-1), B = BigInt(1);
-    ASSERT_EQ(A < B, true);
-    ASSERT_EQ(B < A, false);
+namespace compare {
+    TEST(operator_l, diffneg) {
+        BigInt A = BigInt(-1), B = BigInt(1);
+        ASSERT_EQ(A < B, true);
+        ASSERT_EQ(B < A, false);
+    }
+
+    TEST(operator_l, eq_pos) {
+        BigInt A = BigInt(1), B = BigInt(1);
+        ASSERT_EQ(A < B, false);
+    }
+
+    TEST(operator_l, eq_neg) {
+        BigInt A = BigInt(-1), B = BigInt(-1);
+        ASSERT_EQ(A < B, false);
+    }
+
+    TEST(operator_l, difsize_pos) {
+        BigInt A = BigInt(1234), B = BigInt(12345);
+        ASSERT_EQ(A < B, true);
+        ASSERT_EQ(B < A, false);
+    }
+
+    TEST(operator_l, difsize_neg) {
+        BigInt A = BigInt(-1234), B = BigInt(-12345);
+        ASSERT_EQ(A < B, false);
+        ASSERT_EQ(B < A, true);
+    }
+
+    TEST(operator_l, eqsize_pos) {
+        BigInt A = BigInt(1234), B = BigInt(1240);
+        ASSERT_EQ(A < B, true);
+        ASSERT_EQ(B < A, false);
+    }
+
+    TEST(operator_l, eqsize_neg) {
+        BigInt A = BigInt(-1234), B = BigInt(-1240);
+        ASSERT_EQ(A < B, false);
+        ASSERT_EQ(B < A, true);
+    }
+
+    TEST(operator_g, diffneg) {
+        BigInt A = BigInt(1), B = BigInt(-1);
+        ASSERT_EQ(A > B, true);
+        ASSERT_EQ(B > A, false);
+    }
+
+    TEST(operator_le, l) {
+        BigInt A = BigInt(-1), B = BigInt(1);
+        ASSERT_EQ(A <= B, true);
+        ASSERT_EQ(B <= A, false);
+    }
+
+    TEST(operator_le, e) {
+        BigInt A = BigInt(1), B = BigInt(1);
+        ASSERT_EQ(A <= B, true);
+        ASSERT_EQ(B <= A, true);
+    }
+
+    TEST(operator_ge, g) {
+        BigInt B = BigInt(-1), A = BigInt(1);
+        ASSERT_EQ(A >= B, true);
+        ASSERT_EQ(B >= A, false);
+    }
+
+    TEST(operator_ge, e) {
+        BigInt B = BigInt(1), A = BigInt(1);
+        ASSERT_EQ(A >= B, true);
+        ASSERT_EQ(B >= A, true);
+    }
 }
 
-TEST(operator_l, eq_pos) {
-    BigInt A = BigInt(1), B = BigInt(1);
-    ASSERT_EQ(A < B, false);
-}
+namespace operator_int {
+    TEST(operator_int, pos) {
+        BigInt A = BigInt(1234);
+        ASSERT_EQ((int) A, 1234);
+    }
 
-TEST(operator_l, eq_neg) {
-    BigInt A = BigInt(-1), B = BigInt(-1);
-    ASSERT_EQ(A < B, false);
-}
-
-TEST(operator_l, difsize_pos) {
-    BigInt A = BigInt(1234), B = BigInt(12345);
-    ASSERT_EQ(A < B, true);
-    ASSERT_EQ(B < A, false);
-}
-
-TEST(operator_l, difsize_neg) {
-    BigInt A = BigInt(-1234), B = BigInt(-12345);
-    ASSERT_EQ(A < B, false);
-    ASSERT_EQ(B < A, true);
-}
-
-TEST(operator_l, eqsize_pos) {
-    BigInt A = BigInt(1234), B = BigInt(1240);
-    ASSERT_EQ(A < B, true);
-    ASSERT_EQ(B < A, false);
-}
-
-TEST(operator_l, eqsize_neg) {
-    BigInt A = BigInt(-1234), B = BigInt(-1240);
-    ASSERT_EQ(A < B, false);
-    ASSERT_EQ(B < A, true);
-}
-
-TEST(operator_g, diffneg) {
-    BigInt A = BigInt(1), B = BigInt(-1);
-    ASSERT_EQ(A > B, true);
-    ASSERT_EQ(B > A, false);
-}
-
-TEST(operator_le, l) {
-    BigInt A = BigInt(-1), B = BigInt(1);
-    ASSERT_EQ(A <= B, true);
-    ASSERT_EQ(B <= A, false);
-}
-
-TEST(operator_le, e) {
-    BigInt A = BigInt(1), B = BigInt(1);
-    ASSERT_EQ(A <= B, true);
-    ASSERT_EQ(B <= A, true);
-}
-
-TEST(operator_ge, g) {
-    BigInt B = BigInt(-1), A = BigInt(1);
-    ASSERT_EQ(A >= B, true);
-    ASSERT_EQ(B >= A, false);
-}
-
-TEST(operator_ge, e) {
-    BigInt B = BigInt(1), A = BigInt(1);
-    ASSERT_EQ(A >= B, true);
-    ASSERT_EQ(B >= A, true);
-}
-
-TEST(operator_int, pos) {
-    BigInt A = BigInt(1234);
-    ASSERT_EQ((int) A, 1234);
-}
-
-TEST(operator_int, neg) {
-    BigInt A = BigInt(-1234);
-    ASSERT_EQ((int) A, -1234);
+    TEST(operator_int, neg) {
+        BigInt A = BigInt(-1234);
+        ASSERT_EQ((int) A, -1234);
+    }
 }
 
 TEST(operator_plus_eq, is_neg_eq) {
-    // BigInt& BigInt::operator+=(const BigInt& a) case 1
     int a = 1234, b = 123456;
     BigInt A = BigInt(a), B = BigInt(b);
     A += B;
@@ -227,7 +238,7 @@ TEST(operator_minus_eq, f_lower) {
     ASSERT_EQ(B, BigInt(B));
 }
 
-TEST(operator_minus_eq, f_upper) {
+TEST(operator_minus_ass, f_upper) {
     int a = 2, b = 1210;
     BigInt A = BigInt(a), B = BigInt(b);
     B -= A;
@@ -235,8 +246,8 @@ TEST(operator_minus_eq, f_upper) {
     ASSERT_EQ(A, BigInt(A));
 }
 
-TEST(operator_minus_eq, is_neg_dif) {
-    int a = 3, b = 100;
+TEST(operator_minus_ass, is_neg_dif) {
+    int a = 3, b = -100;
     BigInt A = BigInt(a), B = BigInt(b);
     A -= B;
     ASSERT_EQ(A, BigInt(a-b));
@@ -334,39 +345,95 @@ TEST(operator_mod_ass, div_by_0) {
 
 TEST(operator_plus, is_neg_eq) {
     int a = 1234, b = 123456;
-    BigInt A = BigInt(a), B = BigInt(b);
-    A += B;
-    B += A;
-    ASSERT_EQ(A, BigInt(a + b));
-    ASSERT_EQ(B, BigInt(a + b + b));
+    BigInt A = BigInt(a), B = BigInt(b), C;
+    C = A + B;
+    ASSERT_EQ(C, BigInt(a + b));
 }
 
 TEST(operator_mul, zxc) {
     int a = 1234, b = 123456;
-    BigInt A = BigInt(a), B = BigInt(b);
-    A *= B;
-    ASSERT_EQ(A, BigInt(a * b));
+    BigInt A = BigInt(a), B = BigInt(b), C;
+    C = A * B;
+    ASSERT_EQ(C, BigInt(a * b));
+}
+
+TEST(operator_minus, is_neg_eq) {
+    int a = 1234, b = 123456;
+    BigInt A = BigInt(a), B = BigInt(b), C;
+    C = A - B;
+    ASSERT_EQ(C, BigInt(a - b));
 }
 
 TEST(operator_div, zxc) {
     int a = 1234, b = 2;
-    BigInt A = BigInt(a), B = BigInt(b);
-    A = A / B;
-    ASSERT_EQ(A, BigInt(a / b));
+    BigInt A = BigInt(a), B = BigInt(b), C;
+    C = A / B;
+    ASSERT_EQ(C, BigInt(a / b));
 }
 
 TEST(operator_mod, zxc) {
     int a = 1234, b = 2;
-    BigInt A = BigInt(a), B = BigInt(b);
-    A = A % B;
-    ASSERT_EQ(A, BigInt(a % b));
+    BigInt A = BigInt(a), B = BigInt(b), C;
+    C = A % B;
+    ASSERT_EQ(C, BigInt(a % b));
 }
 
-TEST(binary_xor, zxc) {
+TEST(binary_xor_ass, len1_greater) {
+    int a = -123292, b = 5341;
+    BigInt A = BigInt(a), B = BigInt(b);
+    A ^= B;
+    ASSERT_EQ(A, BigInt(a ^ b));
+}
+
+TEST(binary_xor_ass, len2_greater) {
     int a = -1232, b = 5341;
     BigInt A = BigInt(a), B = BigInt(b);
     A ^= B;
     ASSERT_EQ(A, BigInt(a ^ b));
 }
 
+TEST(binary_xor, zxc) {
+    int a = -1232, b = 5341;
+    BigInt A = BigInt(a), B = BigInt(b), C;
+    C = A ^ B;
+    ASSERT_EQ(C, BigInt(a ^ b));
+}
 
+TEST(output, zxc) {
+    BigInt A = BigInt(-1234);
+    std::cout << "Just check if it matches \"-1234\":\n"
+    << A << "\n";
+}
+
+TEST(inversion, zxc) {
+    int a = 1234;
+    BigInt A = BigInt(a), B;
+    B = ~A;
+    ASSERT_EQ(B, BigInt(~a));
+    ASSERT_EQ(A, BigInt(a));    
+}
+
+TEST(binary_and, zxc) {
+    int a = 1234, b = 4223;
+    BigInt A = BigInt(a), B = BigInt(b);
+    A = A & B;
+    ASSERT_EQ(A, BigInt(a & b));
+}
+
+TEST(binary_or, zxc) {
+    int a = 1234, b = 4223;
+    BigInt A = BigInt(a), B = BigInt(b);
+    A = A | B;
+    ASSERT_EQ(A, BigInt(a | b));
+}
+
+TEST(to_string, neg) {
+    std::string str = "-1234";
+    BigInt A = BigInt(str);
+    ASSERT_EQ((std::string) A, str);
+}
+
+TEST(size, zxc) {
+    BigInt A = BigInt(1234);
+    ASSERT_EQ(A.size(), sizeof(bool) + sizeof("1234"));
+}

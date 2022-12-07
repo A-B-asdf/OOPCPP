@@ -16,7 +16,7 @@ target_link_libraries(bigint-unit-tests
         gtest gtest_main
 )
 
-find_program(GCOVR_EXECUTABLE gcovr)
+find_program(GCOVR_EXECUTABLE lcov)
 if(BIGINT_COVERAGE AND GCOVR_EXECUTABLE)
     message(STATUS "Измерение покрытия кода тестами включено")
 
