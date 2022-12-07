@@ -6,7 +6,11 @@ class BigInt {
 private:
     void RemoveZero();
     void ReverseVal();
+    void ComplementWithZeros(std::string&, std::string&);
+    void BinaryBitOperation(const BigInt&, char operation);
 public:
+    std::string ToBinaryString() const;  // todo: private
+    void BigIntFromSignedBinary(std::string&);
     BigInt();
     BigInt(int);
     BigInt(std::string); // бросать исключение std::invalid_argument при ошибке

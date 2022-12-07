@@ -235,7 +235,7 @@ TEST(operator_minus_eq, f_lower) {
 }
 
 TEST(operator_minus_eq, f_upper) {
-    int a = 3, b = 100;
+    int a = 2, b = 1210;
     BigInt A = BigInt(a), B = BigInt(b);
     B -= A;
     ASSERT_EQ(B, BigInt(b - a));
@@ -312,7 +312,7 @@ TEST(operator_mul_ass, negneg) {
 }
 
 TEST(operator_div_ass, zxc) {
-    int a = 100, b = 3;
+    int a = 1234, b = 2;
     BigInt A = BigInt(a), B = BigInt(b);
     A /= B;
     ASSERT_EQ(A, BigInt(a / b));
@@ -326,7 +326,7 @@ TEST(operator_div_ass, div_by_0) {
 }
 
 TEST(operator_mod_ass, zxc) {
-    int a = 100, b = 3;
+    int a = 32, b = 2;
     BigInt A = BigInt(a), B = BigInt(b);
     A %= B;
     ASSERT_EQ(A, BigInt(a % b));
@@ -356,17 +356,24 @@ TEST(operator_mul, zxc) {
 }
 
 TEST(operator_div, zxc) {
-    int a = 1234, b = 123456;
+    int a = 1234, b = 2;
     BigInt A = BigInt(a), B = BigInt(b);
-    A /= B;
+    A = A / B;
     ASSERT_EQ(A, BigInt(a / b));
 }
 
 TEST(operator_mod, zxc) {
-    int a = 1234, b = 123456;
+    int a = 1234, b = 2;
     BigInt A = BigInt(a), B = BigInt(b);
-    A %= B;
+    A = A % B;
     ASSERT_EQ(A, BigInt(a % b));
+}
+
+TEST(binary_xor, zxc) {
+    int a = -1232, b = 5341;
+    BigInt A = BigInt(a), B = BigInt(b);
+    A ^= B;
+    ASSERT_EQ(A, BigInt(a ^ b));
 }
 
 

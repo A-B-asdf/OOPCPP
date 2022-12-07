@@ -1,6 +1,5 @@
 #include <stdexcept>
 #include <iostream>
-#include "BigInt.h"
 
 void BigInt::RemoveZero() { //*
     size_t index = 0;
@@ -23,6 +22,96 @@ void BigInt::ReverseVal() { // *
         this->val[i] = this->val[size - i];
         this->val[size - i] = c;
     }
+}
+
+void InvertString(std::string& binary) {
+    for (size_t i = 0; i < binary.size(); ++i) {
+        binary[i] = (binary[i] == '0') ? '1' : '0';
+    }
+}
+
+void BigInt::ComplementWithZeros(std::string& str1, std::string& str2) {
+    size_t len1 = str1.size() - 1;
+    size_t len2 = str2.size() - 1;
+    std::string str000 = "";
+    if (len1 > len2) {
+        size_t diff = len1 - len2;
+        len2 = len1;
+        for (size_t i = 0; i < diff; ++i) {
+            str000 += str2[0];
+        }
+        str2 = str000 + str2;
+    }
+    else {
+        size_t diff = len2 - len1;
+        len1 = len2;
+        for (size_t i = 0; i < diff; ++i) {
+            str000 += str1[0];
+        }
+        str1 = str000 + str1;
+    }
+}
+
+std::string BigInt::ToBinaryString() const {
+    std::string result = "";
+    BigInt this_cp = *this;
+    this_cp.is_neg = false;
+    if (this->is_neg) {
+        --this_cp;
+    }
+    do {
+        result += '0' + (int) (this_cp % BigInt(2));
+        this_cp /= BigInt(2);
+    } while (this_cp > BigInt());
+    result = "0" + std::string(result.crbegin(), result.crend());
+    if (this->is_neg) {
+        InvertString(result);
+    }
+    return result;
+}
+
+void BigInt::BigIntFromSignedBinary(std::string& binary) {
+    *this = BigInt();
+    if (binary[0] == '0') {
+        size_t index = binary.size() - 1;
+        size_t deg2 = 1;
+        while (index) {
+            *this += ((binary[index] - '0') * deg2);
+            deg2 *= 2;
+            --index;
+        }
+    }
+    else {
+        size_t index = binary.size() - 1;
+        size_t deg2 = 1;
+        while (index) {
+            *this += ((((binary[index] == '0') ? '1' : '0') - '0') * deg2);
+            deg2 *= 2;
+            --index;
+        }
+        *this += 1;
+        this->is_neg = true;
+    }
+}
+
+void BigInt::BinaryBitOperation(const BigInt& a, char operation) {
+    std::string str1 = this->ToBinaryString();
+    std::string str2 = a.ToBinaryString();
+    ComplementWithZeros(str1, str2);
+    for (size_t i = 0; i < str1.size(); ++i) {
+        switch (operation) {
+        case '^':
+            str1[i] = (str1[i] != str2[i]) ? '1' : '0';
+            break;
+        case '&':
+            str1[i] = ((str1[i] - '0') && (str2[i] - '0')) ? '1' : '0';
+            break;
+        case '|':
+            str1[i] = ((str1[i] - '0') || (str2[i] - '0')) ? '1' : '0';
+            break;
+        }
+    }
+    BigIntFromSignedBinary(str1);
 }
 
 BigInt::BigInt() { //
@@ -186,8 +275,8 @@ BigInt& BigInt::operator-=(const BigInt& a) {
                 borrow = 1;
             }
             result.val.insert(0, 1, (char) tmp + '0');
-            result.RemoveZero();
         }
+        result.RemoveZero();
         *this = result;
         return *this;        
     }
@@ -217,7 +306,10 @@ BigInt& BigInt::operator/=(const BigInt& divider) {
     return *this;
 }
 
-//BigInt& BigInt::operator^=(const BigInt&);
+BigInt& BigInt::operator^=(const BigInt& a) {
+    BinaryBitOperation(a, '^');
+    return *this;
+}
 
 BigInt& BigInt::operator%=(const BigInt& divider) {
     if (divider == BigInt()) {
@@ -232,8 +324,15 @@ BigInt& BigInt::operator%=(const BigInt& divider) {
     return *this;
 }
 
-//BigInt& BigInt::operator&=(const BigInt&);
-//BigInt& BigInt::operator|=(const BigInt&);
+BigInt& BigInt::operator&=(const BigInt& a) {
+    BinaryBitOperation(a, '&');
+    return *this;
+}
+
+BigInt& BigInt::operator|=(const BigInt& a) {
+    BinaryBitOperation(a, '|');
+    return *this;
+}
 
 BigInt BigInt::operator+() const {  // unary +
     BigInt result = *this;
@@ -333,14 +432,13 @@ BigInt BigInt::operator/(const BigInt& a) {
 
 BigInt BigInt::operator%(const BigInt& a) {
     BigInt result = *this;
-    result /= a;
+    result %= a;
     return result;
 }
 
 //BigInt BigInt::operator&(const BigInt& a) {}
 
 //BigInt BigInt::operator|(const BigInt& a) {}
-
 
 std::ostream& operator<<(std::ostream& o, const BigInt& i) {
     if (i.is_neg) {

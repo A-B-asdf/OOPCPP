@@ -4,8 +4,8 @@
 ##
 ###################################################################################################
 
-cmake_minimum_required(VERSION 3.14)
-project(BigInt VERSION 1.0 LANGUAGES CXX)
+cmake_minimum_required(VERSION 3.20)
+project(BigInt LANGUAGES CXX)
 
 get_directory_property(IS_SUBPROJECT PARENT_DIRECTORY)
 
@@ -36,6 +36,19 @@ if((CMAKE_CXX_COMPILER_ID MATCHES "GNU") OR (CMAKE_CXX_COMPILER_ID MATCHES "Clan
         -Wall
         -Wextra
         -Wpedantic
+
+        -Wcast-align
+        -Wcast-qual
+        -Wconversion
+        -Wctor-dtor-privacy
+        -Wenum-compare
+        -Wfloat-equal
+        -Wnon-virtual-dtor
+        -Wold-style-cast
+        -Woverloaded-virtual
+        -Wredundant-decls
+        -Wsign-conversion
+        -Wsign-promo
     )
 elseif(CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
     add_compile_options(/W4 /WX)
@@ -102,3 +115,9 @@ if(NOT BIGINT_TESTING)
 else()
     add_subdirectory(test)
 endif()
+
+###################################################################################################
+##
+##      Документация
+##
+###################################################################################################
