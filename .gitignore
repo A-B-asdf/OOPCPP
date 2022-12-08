@@ -10,5 +10,8 @@ task-*/bin/
 task-*/cmake_install.cmake
 task-*/MakeFile
 task-*/CMakeCache.txt
+task-*/out
+task-*/*.info
+task-1/bigint.info
 
 *_old
