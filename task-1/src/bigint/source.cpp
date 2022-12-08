@@ -208,6 +208,9 @@ const BigInt BigInt::operator--(int) {
 }
 
 BigInt& BigInt::operator+=(const BigInt& a) {
+    if (a == BigInt(0)) {
+        return *this;
+    }
     if (this->is_neg != a.is_neg) {
         *this -= -a;
         return *this;

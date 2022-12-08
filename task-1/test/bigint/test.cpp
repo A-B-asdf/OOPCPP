@@ -208,7 +208,7 @@ TEST(operator_plus_eq, is_neg_eq) {
 }
 
 TEST(operator_plus_eq, is_neg_ne) {
-    int a = 1234, b = -123456;
+    int a = -10, b = 1;
     BigInt A = BigInt(a), B = BigInt(b);
     A += B;
     B += A;
@@ -344,7 +344,7 @@ TEST(operator_mod_ass, div_by_0) {
 }
 
 TEST(operator_plus, is_neg_eq) {
-    int a = 1234, b = 123456;
+    int a = -1, b = 0;
     BigInt A = BigInt(a), B = BigInt(b), C;
     C = A + B;
     ASSERT_EQ(C, BigInt(a + b));
@@ -439,11 +439,12 @@ TEST(size, zxc) {
 }
 
 TEST(additional_test, zxc) {
-    for (int a = -300; a <= 300; ++a) {
-        const BigInt A = BigInt(a);
-        for (int b = -300; b <= 300; ++b) {
-            const BigInt B = BigInt(b);
-            EXPECT_EQ(A + B, BigInt(a + b));
+    int N = 300;
+    for (int a = -N; a <= -N; ++a) {
+        BigInt A = BigInt(a);
+        for (int b = N; b <= N; ++b) {
+            BigInt B = BigInt(b);
+            ASSERT_EQ(A + B, BigInt(a + b));
             EXPECT_EQ(A - B, BigInt(a - b));
             EXPECT_EQ(A * B, BigInt(a * b));
             if (b != 0) {
