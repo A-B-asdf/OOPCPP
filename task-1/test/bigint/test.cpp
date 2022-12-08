@@ -406,7 +406,7 @@ TEST(output, zxc) {
 }
 
 TEST(inversion, zxc) {
-    int a = 1234;
+    int a = -300;
     BigInt A = BigInt(a), B;
     B = ~A;
     ASSERT_EQ(B, BigInt(~a));
@@ -436,4 +436,32 @@ TEST(to_string, neg) {
 TEST(size, zxc) {
     BigInt A = BigInt(1234);
     ASSERT_EQ(A.size(), sizeof(bool) + sizeof("1234"));
+}
+
+TEST(additional_test, zxc) {
+    for (int a = -300; a <= 300; ++a) {
+        const BigInt A = BigInt(a);
+        for (int b = -300; b <= 300; ++b) {
+            const BigInt B = BigInt(b);
+            EXPECT_EQ(A + B, BigInt(a + b));
+            EXPECT_EQ(A - B, BigInt(a - b));
+            EXPECT_EQ(A * B, BigInt(a * b));
+            if (b != 0) {
+                EXPECT_EQ(A / B, BigInt(a / b));
+                EXPECT_EQ(A % B, BigInt(a % b));
+            }
+            EXPECT_EQ(A ^ B, BigInt(a ^ b));
+            EXPECT_EQ(A & B, BigInt(a & b));
+            EXPECT_EQ(A | B, BigInt(a | b));
+            EXPECT_EQ(A == B, a == b); 
+            EXPECT_EQ(A != B, a != b); 
+            EXPECT_EQ(A >= B, a >= b); 
+            EXPECT_EQ(A <= B, a <= b); 
+            EXPECT_EQ(A > B, a > b); 
+            EXPECT_EQ(A < B, a < b); 
+        }
+        EXPECT_EQ(~A, BigInt(~a));
+        EXPECT_EQ(A, BigInt((std::string) A));
+        EXPECT_EQ(-A, BigInt(-a));
+    }
 }

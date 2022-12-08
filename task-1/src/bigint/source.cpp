@@ -14,6 +14,9 @@ void BigInt::RemoveZero() {
     else {
         this->val = this->val.substr(index, this->val.size() - index);
     }
+    if (this->val == "0") {
+        this->is_neg = false;
+    }
 }
 
 void BigInt::ReverseVal() {
@@ -154,10 +157,7 @@ BigInt::BigInt(std::string str) {
         }
     }
     this->val = str.substr(begining, size-begining);
-    this->RemoveZero(); 
-    if (this->val == "0") { 
-        is_neg = false;
-    }
+    this->RemoveZero();
 }
 
 BigInt::BigInt(const BigInt& i) { 
@@ -320,12 +320,15 @@ BigInt& BigInt::operator%=(const BigInt& divider) {
     if (divider == BigInt()) {
         throw std::runtime_error("Math error: Attempted to divide by Zero\n");
     }
+    bool is_neg1 = this->is_neg;
     this->is_neg = 0;
     BigInt divider_cp = divider;
     divider_cp.is_neg = false;
     while (*this >= divider_cp) {
         *this -= divider_cp;
     }
+    this->is_neg = is_neg1;
+    RemoveZero();
     return *this;
 }
 
@@ -346,7 +349,9 @@ BigInt BigInt::operator+() const {
 
 BigInt BigInt::operator-() const {
     BigInt result = *this;
-    result.is_neg = !this->is_neg;
+    if (this->val != "0") {
+        result.is_neg = !this->is_neg;
+    }
     return result;
 }
 
