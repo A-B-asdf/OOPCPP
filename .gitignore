@@ -1,8 +1,9 @@
 # Idea
 .idea/
-# CMake
-cmake-build-*/
-task-1/CMakeFiles/
+*/
+!task-*/
+
+task-*/CMakeFiles/
 
 task-*/googletest*
 task-*/lib/
@@ -13,5 +14,3 @@ task-*/CMakeCache.txt
 task-*/out
 task-*/*.info
 task-1/bigint.info
-
-*_old

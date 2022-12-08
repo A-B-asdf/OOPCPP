@@ -5,13 +5,15 @@ class BigInt {
     bool is_neg = false;
     std::string val = "";
 private:
-    void RemoveZero();
-    void ReverseVal();
-    void ComplementWithZeros(std::string&, std::string&);
+    void RemoveZeroes();
+    std::string ReverseString(std::string&) const ;
+    friend bool AbsLower(const BigInt&, const BigInt&);
+    std::string GetBinaryString() const;
+    void BigIntFromSignedBinary(std::string&);
+    void Complement2EqualLen(std::string&, std::string&);
+    void InvertString(std::string&) const;
     void BinaryBitOperation(const BigInt&, char operation);
 public:
-    std::string ToBinaryString() const;  // todo: private
-    void BigIntFromSignedBinary(std::string&);
     BigInt();
     BigInt(int);
     BigInt(std::string); // бросать исключение std::invalid_argument при ошибке
@@ -36,14 +38,14 @@ public:
     BigInt& operator&=(const BigInt&);
     BigInt& operator|=(const BigInt&);
 
-    BigInt operator+(const BigInt&);
-    BigInt operator-(const BigInt&);
-    BigInt operator*(const BigInt&);
-    BigInt operator/(const BigInt&);
-    BigInt operator^(const BigInt&);
-    BigInt operator%(const BigInt&);
-    BigInt operator&(const BigInt&);
-    BigInt operator|(const BigInt&);
+    BigInt operator+(const BigInt&) const;
+    BigInt operator-(const BigInt&) const;
+    BigInt operator*(const BigInt&) const;
+    BigInt operator/(const BigInt&) const;
+    BigInt operator^(const BigInt&) const;
+    BigInt operator%(const BigInt&) const;
+    BigInt operator&(const BigInt&) const;
+    BigInt operator|(const BigInt&) const;
 
     BigInt operator+() const;  // unary +
     BigInt operator-() const;  // unary -
