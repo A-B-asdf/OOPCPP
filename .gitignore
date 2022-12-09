@@ -1,4 +1,13 @@
-# Idea
-.idea/
-# CMake
-cmake-build-*/
+/*
+!task-*/
+
+CMakeFiles/
+
+googletest*
+lib/
+bin/
+cmake_install.cmake
+MakeFile
+CMakeCache.txt
+out
+*.info
