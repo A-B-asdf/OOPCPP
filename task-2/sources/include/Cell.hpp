@@ -1,8 +1,8 @@
 class Cell {
 private:
-    bool _alive;
+    bool _is_alive;
 public:
-    Cell() : _alive(false) {}
+    Cell() : _is_alive(false) {}
     Cell(bool alive);
     const bool& IsAlive() const;
     void SetAlive(bool);

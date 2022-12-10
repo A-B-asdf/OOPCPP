@@ -33,3 +33,9 @@ file(GLOB all_SRCS
 )
 
 add_library(Models ${all_SRCS})
+
+add_executable(main 
+    main.cpp
+)
+
+target_link_libraries(main Models)

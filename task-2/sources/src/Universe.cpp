@@ -12,4 +12,3 @@ void Universe::SetRules(const std::set<int> &cells_number_to_born, const std::se
 void Universe::SetName(const std::string &name) {
     this->_name = name;
 }
-
