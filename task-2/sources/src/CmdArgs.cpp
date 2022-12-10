@@ -68,7 +68,7 @@ mode_t CmdArgs::GetMode() {
     return this->_mode;
 }
 
-
+/*
 void CmdArgs::SetIterations(int iterations) {
     this->_iterations = iterations;
 }
@@ -84,7 +84,7 @@ void CmdArgs::SetOutputFile(std::string &output_file) {
 void CmdArgs::SetMode(mode_t mode) {
     this->_mode = mode;
 }
-
+*/
 
 std::ostream& operator<<(std::ostream& o, const CmdArgs& args) {
     o << "iterations:   " << args._iterations   << "\n"
