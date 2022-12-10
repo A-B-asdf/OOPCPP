@@ -1,12 +1,18 @@
 #include <getopt.h>
 #include <string>
+#include <iostream>
+
+typedef enum Modes {
+        ONLINE
+    ,   OFFLINE
+} mode_t;
 
 class CmdArgs {
 private:
     int _iterations;
     std::string _input_file;
     std::string _output_file;
-    int _mode;
+    mode_t _mode;
 public:
     CmdArgs() = default;
     CmdArgs(int argc, char* argv[]);
@@ -14,10 +20,14 @@ public:
     int GetIterations();
     std::string GetInputFile();
     std::string GetOutputFile();
-    int GetMode();
+    mode_t GetMode();
 
-    int SetIterations();
-    std::string SetInputFile();
-    std::string SetOutputFile();
-    int SetMode();
+    void SetIterations(int);
+    void SetInputFile(std::string&);
+    void SetOutputFile(std::string&);
+    void SetMode(mode_t);
+
+    friend std::ostream& operator<<(std::ostream&, const CmdArgs&);
 };
+
+std::ostream& operator<<(std::ostream&, const CmdArgs&);
