@@ -64,7 +64,7 @@ std::string CmdArgs::GetOutputFile() {
     return this->_output_file;
 }
 
-mode_t CmdArgs::GetMode() {
+mode_type CmdArgs::GetMode() {
     return this->_mode;
 }
 
@@ -81,10 +81,14 @@ void CmdArgs::SetOutputFile(std::string &output_file) {
     this->_output_file = output_file;
 }
 
-void CmdArgs::SetMode(mode_t mode) {
+void CmdArgs::SetMode(mode_type mode) {
     this->_mode = mode;
 }
 */
+
+void CmdArgs::SetDefaultInputFile() {
+    this->_input_file = "";
+}
 
 std::ostream& operator<<(std::ostream& o, const CmdArgs& args) {
     o << "iterations:   " << args._iterations   << "\n"

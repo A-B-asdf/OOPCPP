@@ -1,18 +1,19 @@
 #include <getopt.h>
 #include <string>
 #include <iostream>
+#pragma once
 
 typedef enum Modes {
         ONLINE = 0
     ,   OFFLINE
-} mode_t;
+} mode_type;
 
 class CmdArgs {
 private:
     int _iterations = 1;
-    std::string _input_file = NULL;
-    std::string _output_file = NULL;
-    mode_t _mode = ONLINE;
+    std::string _input_file = "";
+    std::string _output_file = "";
+    mode_type _mode = ONLINE;
 public:
     CmdArgs() = default;
     CmdArgs(int argc, char* argv[]);
@@ -20,13 +21,15 @@ public:
     int GetIterations();
     std::string GetInputFile();
     std::string GetOutputFile();
-    mode_t GetMode();
-/*
-    void SetIterations(int);
-    void SetInputFile(std::string&);
-    void SetOutputFile(std::string&);
-    void SetMode(mode_t);
-*/
+    mode_type GetMode();
+
+    //void SetIterations(int);
+    //void SetInputFile(std::string&);
+    //void SetOutputFile(std::string&);
+    //void SetMode(mode_type);
+
+    void SetDefaultInputFile();
+
     friend std::ostream& operator<<(std::ostream&, const CmdArgs&);
 };
 
