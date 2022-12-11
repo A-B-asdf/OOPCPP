@@ -1,6 +1,6 @@
 #Life 1.06
 #N sdlkdfja
-#R B1234/S432
+#R B3/S23
 1 0
 2 1
 0 2

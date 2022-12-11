@@ -1,3 +1,5 @@
+#pragma once
+
 #include <string>
 #include <vector>
 #include <set>
@@ -11,6 +13,7 @@ private:
     std::set<int> _cells_number_to_stay;
     std::string _name = "Default";
     std::vector<std::vector<Cell>> _field;
+    int _iteration = 0;
 public:
     Universe() = default;
     Universe(std::pair<int, int> &size, 
@@ -22,11 +25,20 @@ public:
         _cells_number_to_born(cells_number_to_born), 
         _cells_number_to_stay(cells_number_to_stay),
         _name(name) {}
-    void SetSize(std::pair<int, int> &size);
+ 
+    int RowCount();
+    int ColCount();
+    bool IsCellAlive(int x, int y);
+    bool IsCellAliveNext(int x, int y);
+    
     void SetRules(const std::set<int>&, const std::set<int>&);
     void SetName(const std::string&);
+    void SetSize(std::pair<int, int> &size);
+    void SetCell(int x, int y, bool is_alive);
 
-    void Save2File(std::string &filepath);
+    void IncreaseIteration(int);
+
+    void Save2File(std::string&);
 
     friend class UniverseParser;
     friend std::ostream& operator<<(std::ostream&, const Universe&);
@@ -37,6 +49,7 @@ std::ostream& operator<<(std::ostream&, const Universe&);
 class UniverseParser {
 private:
     std::string _input_file;
+    std::string _output_file;
     void SetDefaultInputFile();
     void AddNumber2Born(int, Universe&);
     void AddNumber2Stay(int, Universe&);
@@ -46,6 +59,7 @@ public:
     UniverseParser(CmdArgs&);  // todo: сделать исключение, чтобы файл был задан
 
     void SetInputFile(CmdArgs&);
+    void SetOutputFile(CmdArgs&);
 
     void Parse(Universe&);
 

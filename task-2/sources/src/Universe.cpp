@@ -2,6 +2,52 @@
 #include <fstream>
 #include <regex>
 
+int mod(int n, int d) {
+    int result = n % d;
+    if (result < 0)
+        result += d;
+    return result;
+}
+
+bool Universe::IsCellAlive(int x, int y) {
+    return this->_field
+            .at(mod(x, this->_size.first))
+            .at(mod(y, this->_size.second))
+            .IsAlive();
+}
+
+bool Universe::IsCellAliveNext(int x, int y) {
+    int sum = 0;
+    if (IsCellAlive(x    , y - 1)) ++sum;
+    if (IsCellAlive(x    , y + 1)) ++sum;
+    if (IsCellAlive(x - 1, y    )) ++sum;
+    if (IsCellAlive(x - 1, y - 1)) ++sum;
+    if (IsCellAlive(x - 1, y + 1)) ++sum;
+    if (IsCellAlive(x + 1, y    )) ++sum;
+    if (IsCellAlive(x + 1, y + 1)) ++sum;
+    if (IsCellAlive(x + 1, y - 1)) ++sum;
+    if (this->IsCellAlive(x, y)) {
+        for (int n : _cells_number_to_stay) {
+            if (n == sum) {
+                return true;
+            }
+        }
+        return false;
+    }
+    else {
+        for (int n : _cells_number_to_born) {
+            if (n == sum) {
+                return true;
+            }
+        }
+        return false;
+    }
+}
+
+void Universe::SetCell(int x, int y, bool is_alive) {
+    return this->_field.at(x).at(y).SetAlive(is_alive);
+}
+
 void Universe::SetSize(std::pair<int, int> &size) {
     this->_size = size;
 }
@@ -15,8 +61,20 @@ void Universe::SetName(const std::string &name) {
     this->_name = name;
 }
 
-void Universe::Save2File(std::string &filepath) {
-    std::ofstream out(filepath);
+int Universe::RowCount() {
+    return this->_size.first;
+}
+
+int Universe::ColCount() {
+    return this->_size.second;
+}
+
+void Universe::IncreaseIteration(int a) {
+    this->_iteration += a;
+}
+
+void Universe::Save2File(std::string &filename) {
+    std::ofstream out(filename);
     out << "#Life 1.06\n";
     out << "#N " << this->_name << "\n";
     out << "#R B";
@@ -39,7 +97,7 @@ void Universe::Save2File(std::string &filepath) {
 }
 
 std::ostream& operator<<(std::ostream& o, const Universe& universe) {
-    o << universe._name       << "\n";
+    o << "Name: " << universe._name << "\n";
     o << "Rules: B";
     for (int num : universe._cells_number_to_born) {
         o << num;
@@ -49,6 +107,7 @@ std::ostream& operator<<(std::ostream& o, const Universe& universe) {
         o << num;
     }
     o << "\n";
+    std::cout << "Iteration: " << universe._iteration << "\n";
     for (int x = 0; x < universe._size.first; ++x) {
         for (int y = 0; y < universe._size.second; ++y) {
             std::cout << universe._field.at(x).at(y);
@@ -60,6 +119,7 @@ std::ostream& operator<<(std::ostream& o, const Universe& universe) {
 
 UniverseParser::UniverseParser(CmdArgs &args) {
     this->SetInputFile(args);
+    this->SetOutputFile(args);
 }
 
 void UniverseParser::SetInputFile(CmdArgs &args) {
@@ -69,6 +129,10 @@ void UniverseParser::SetInputFile(CmdArgs &args) {
     else {
         this->_input_file = args.GetInputFile();
     }
+}
+
+void UniverseParser::SetOutputFile(CmdArgs &args) {
+    this->_output_file = args.GetOutputFile();
 }
 
 void UniverseParser::SetDefaultInputFile() {
@@ -84,18 +148,18 @@ void UniverseParser::AddNumber2Stay(int a, Universe &universe) {
 }
 
 void UniverseParser::AddCell(std::pair<int, int>& coords, Universe &universe) {
-    if (coords.first >= universe._size.first - 1) {
-        universe._field.resize(coords.first + 2);
-        for (int i = universe._size.first; i < coords.first + 2; ++i) {
+    if (coords.first >= universe._size.first - 2) {
+        universe._field.resize(coords.first + 3);
+        for (int i = universe._size.first; i < coords.first + 3; ++i) {
             universe._field[i].resize(universe._size.second, Cell());
         }
-        universe._size.first = coords.first + 2;
+        universe._size.first = coords.first + 3;
     }
-    if (coords.second >= universe._size.second - 1) {
+    if (coords.second >= universe._size.second - 2) {
         for (int i = 0; i < universe._size.first ; ++i) {
-            universe._field[i].resize(coords.second + 2, Cell());
+            universe._field[i].resize(coords.second + 3, Cell());
         }
-        universe._size.second = coords.second + 2;
+        universe._size.second = coords.second + 3;
     }
     
     universe._field.at(coords.first).at(coords.second).SetAlive(true);
