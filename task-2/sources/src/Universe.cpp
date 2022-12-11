@@ -15,17 +15,38 @@ void Universe::SetName(const std::string &name) {
     this->_name = name;
 }
 
+void Universe::Save2File(std::string &filepath) {
+    std::ofstream out(filepath);
+    out << "#Life 1.06\n";
+    out << "#N " << this->_name << "\n";
+    out << "#R B";
+    for (int num : this->_cells_number_to_born) {
+        out << num;
+    }
+    out << "/S";
+    for (int num : this->_cells_number_to_stay) {
+        out << num;
+    }
+    out << "\n";
+    for (int x = 0; x < this->_size.first; ++x) {
+        for (int y = 0; y < this->_size.second; ++y) {
+            if (this->_field.at(x).at(y).IsAlive()) {
+                out << x << " " << y << "\n";
+            }
+        }
+    }
+    out.close();
+}
+
 std::ostream& operator<<(std::ostream& o, const Universe& universe) {
     o << universe._name       << "\n";
-    o << universe._size.first << " " << universe._size.second << "\n";
-    o << "n2b: ";
-    for (int number : universe._cells_number_to_born) {
-        o << number;
+    o << "Rules: B";
+    for (int num : universe._cells_number_to_born) {
+        o << num;
     }
-    o << "\n";
-    o << "n2s: ";
-    for (int number : universe._cells_number_to_stay) {
-        o << number;
+    o << "/S";
+    for (int num : universe._cells_number_to_stay) {
+        o << num;
     }
     o << "\n";
     for (int x = 0; x < universe._size.first; ++x) {
@@ -63,27 +84,23 @@ void UniverseParser::AddNumber2Stay(int a, Universe &universe) {
 }
 
 void UniverseParser::AddCell(std::pair<int, int>& coords, Universe &universe) {
-    if (coords.first >= universe._size.first) {
-        universe._field.resize(coords.first + 1);
-        for (int i = universe._size.first; i < coords.first + 1; ++i) {
+    if (coords.first >= universe._size.first - 1) {
+        universe._field.resize(coords.first + 2);
+        for (int i = universe._size.first; i < coords.first + 2; ++i) {
             universe._field[i].resize(universe._size.second, Cell());
         }
-        universe._size.first = coords.first + 1;
+        universe._size.first = coords.first + 2;
     }
-    if (coords.second >= universe._size.second) {
-        for (int i = 0; i < universe._size.first; ++i) {
-            //std::cout << i << "\n";
-            universe._field[i].resize(coords.second + 1, Cell());
+    if (coords.second >= universe._size.second - 1) {
+        for (int i = 0; i < universe._size.first ; ++i) {
+            universe._field[i].resize(coords.second + 2, Cell());
         }
-        universe._size.second = coords.second + 1;
+        universe._size.second = coords.second + 2;
     }
-    //std::cout << universe._field.size()                     << " " << coords.first  << "  "
-    //          << universe._field.at(coords.first).size()    << " " << coords.second << "\n";
-
+    
     universe._field.at(coords.first).at(coords.second).SetAlive(true);
     // todo: работа с отрицательными координатами - смещение
 }
-
 
 void UniverseParser::Parse(Universe &universe) {  // todo: распихать по методам
     std::string line;
@@ -101,17 +118,15 @@ void UniverseParser::Parse(Universe &universe) {  // todo: распихать п
     // todo: check 2 line
     universe.SetName(line.substr(3, line.size() - 3));
     std::getline(in, line);  // third line - Rules
-    std::cout << line << " from56\n";
     std::regex b_rgx("#R B(\\d+)/S\\d+");
     std::regex s_rgx("#R B\\d+/S(\\d+)");
     std::smatch b_match;
     std::smatch s_match;
     if (!std::regex_search(line, b_match, b_rgx) 
         || !std::regex_search(line, s_match, s_rgx)) {
-        std::cout << "BAD INPUT\n";
+        std::cout << "BAD INPUT\n";  // todo
     }
     else {
-        std::cout << b_match[1] << " " << s_match[1] << "\n";
         for (int i = 0; i < b_match[1].length(); ++i) {
             int new_num = b_match[1].str()[i] - '0';
             this->AddNumber2Born(new_num, universe);

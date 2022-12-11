@@ -26,8 +26,10 @@ public:
     void SetRules(const std::set<int>&, const std::set<int>&);
     void SetName(const std::string&);
 
-    friend std::ostream& operator<<(std::ostream&, const Universe&);
+    void Save2File(std::string &filepath);
+
     friend class UniverseParser;
+    friend std::ostream& operator<<(std::ostream&, const Universe&);
 };
 
 std::ostream& operator<<(std::ostream&, const Universe&);

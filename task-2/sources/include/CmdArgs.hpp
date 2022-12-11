@@ -19,8 +19,8 @@ public:
     CmdArgs(int argc, char* argv[]);
 
     int GetIterations();
-    std::string GetInputFile();
-    std::string GetOutputFile();
+    std::string& GetInputFile();
+    std::string& GetOutputFile();
     mode_type GetMode();
 
     //void SetIterations(int);

@@ -56,11 +56,11 @@ int CmdArgs::GetIterations() {
     return this->_iterations;
 }
 
-std::string CmdArgs::GetInputFile() {
+std::string& CmdArgs::GetInputFile() {
     return this->_input_file;
 }
 
-std::string CmdArgs::GetOutputFile() {
+std::string& CmdArgs::GetOutputFile() {
     return this->_output_file;
 }
 
