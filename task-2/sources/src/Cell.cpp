@@ -14,3 +14,8 @@ Cell& Cell::operator=(const Cell &cell) {
     }
     return *this;
 }
+
+std::ostream& operator<<(std::ostream &o, const Cell &cell) {
+    o << ((cell.IsAlive()) ? '*' : '.');
+    return o;
+}

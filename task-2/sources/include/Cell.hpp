@@ -1,3 +1,5 @@
+#include <ostream>
+
 class Cell {
 private:
     bool _is_alive;
@@ -7,4 +9,7 @@ public:
     const bool& IsAlive() const;
     void SetAlive(bool);
     Cell& operator=(const Cell&);
+    friend std::ostream& operator<<(std::ostream&, const Cell&);
 };
+
+std::ostream& operator<<(std::ostream&, const Cell&);

@@ -20,14 +20,20 @@ std::ostream& operator<<(std::ostream& o, const Universe& universe) {
     o << universe._size.first << " " << universe._size.second << "\n";
     o << "n2b: ";
     for (int number : universe._cells_number_to_born) {
-        o << number << "-";
+        o << number;
     }
     o << "\n";
     o << "n2s: ";
     for (int number : universe._cells_number_to_stay) {
-        o << number << "-";
+        o << number;
     }
     o << "\n";
+    for (int x = 0; x < universe._size.first; ++x) {
+        for (int y = 0; y < universe._size.second; ++y) {
+            std::cout << universe._field.at(x).at(y);
+        }
+        std::cout << "\n";
+    }
     return o;
 }
 
@@ -57,11 +63,29 @@ void UniverseParser::AddNumber2Stay(int a, Universe &universe) {
 }
 
 void UniverseParser::AddCell(std::pair<int, int>& coords, Universe &universe) {
+    if (coords.first >= universe._size.first) {
+        universe._field.resize(coords.first + 1);
+        for (int i = universe._size.first; i < coords.first + 1; ++i) {
+            universe._field[i].resize(universe._size.second, Cell());
+        }
+        universe._size.first = coords.first + 1;
+    }
+    if (coords.second >= universe._size.second) {
+        for (int i = 0; i < universe._size.first; ++i) {
+            //std::cout << i << "\n";
+            universe._field[i].resize(coords.second + 1, Cell());
+        }
+        universe._size.second = coords.second + 1;
+    }
+    //std::cout << universe._field.size()                     << " " << coords.first  << "  "
+    //          << universe._field.at(coords.first).size()    << " " << coords.second << "\n";
+
     universe._field.at(coords.first).at(coords.second).SetAlive(true);
+    // todo: работа с отрицательными координатами - смещение
 }
 
 
-void UniverseParser::Parse(Universe &universe) {
+void UniverseParser::Parse(Universe &universe) {  // todo: распихать по методам
     std::string line;
     std::ifstream in;
     in.open(this->_input_file, std::ios::in);

@@ -6,7 +6,7 @@
 
 class Universe {
 private:
-    std::pair<int, int> _size = {100, 100};
+    std::pair<int, int> _size = {0, 0};
     std::set<int> _cells_number_to_born;
     std::set<int> _cells_number_to_stay;
     std::string _name = "Default";
