@@ -22,7 +22,7 @@ public:
 #include "Universe.hpp"
 #include <algorithm> 
 
-void GameController::Tick(Universe &universe, int tick_count) {
+void GameController::Tick(Universe &universe, int tick_count) {  // todo: разбить на файлы
     for (int i = 0; i < tick_count; ++ i) {
         std::vector<std::pair<int, int>> next_alive_cells;
         for (int x = 0; x < universe.RowCount(); ++x) {
@@ -45,8 +45,8 @@ void GameController::Tick(Universe &universe, int tick_count) {
                 universe.SetCell(x, y, is_alive);
             }
         }
+        universe.IncreaseIteration(1);
     }
-    universe.IncreaseIteration(tick_count);
 }
 
 class OnlineController : public GameController {
@@ -57,7 +57,7 @@ public:
     void PrintHelp();
 };
 
-void OnlineController::Work(Universe &universe) {
+void OnlineController::Work(Universe &universe) {  //, CmdArgs &args
     std::cout << universe;
     PrintHelp();
     bool break_cmd = false;
@@ -119,4 +119,16 @@ void OnlineController::PrintHelp() {
     << "tick <n=1> - tick world n times, default 1" << std::endl
     << "exit - exit from program" << std::endl
     << "help - see this text again ^ ^" << std::endl;
+}
+
+class OfflineController : public GameController {
+private:
+    
+public:
+    void Work(Universe&, CmdArgs&);
+};
+
+void OfflineController::Work(Universe &universe, CmdArgs &args) {
+    this->Tick(universe, args.GetIterations());
+    universe.Save2File(args.GetOutputFile());
 }

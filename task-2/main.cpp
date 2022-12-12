@@ -1,6 +1,6 @@
 #include "CmdArgs.hpp"
 #include "Universe.hpp"
-#include "OnlineController.hpp"
+#include "Controllers.hpp"
 /*
 int WaitForCommands() {
     
@@ -33,10 +33,13 @@ int main(int argc, char *argv[]) {
     }
     else if (args.GetMode() == OFFLINE) {
         if (args.GetInputFile() == "") {
-            ;
+            std::cout << "No input file, it's nessesary for offline mode";
         }
         else {
-            ;
+            UniverseParser parser = UniverseParser(args);
+            parser.Parse(universe);
+            OfflineController controller = OfflineController();
+            controller.Work(universe, args);
         }
     }
 
