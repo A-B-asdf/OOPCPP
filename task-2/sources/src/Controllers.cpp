@@ -1,12 +1,16 @@
 #include "Controllers.hpp"
 
 #include <algorithm> 
+#include <chrono>
+#include <thread>
 
 void GameController::Tick(Universe &universe, int tick_count) {
     for (int i = 0; i < tick_count; ++ i) {
         std::vector<std::pair<int, int>> next_alive_cells = universe.GetNextAliveCells();
         universe.SetFieldFromAliveCoords(next_alive_cells);
         universe.IncreaseIteration(1);
+        std::this_thread::sleep_for(std::chrono::milliseconds(500));
+        std::cout << universe;
     }
 }
 
@@ -33,7 +37,6 @@ void OnlineController::Work(Universe &universe, CmdArgs &args) {
             case TICK: {
                 int tick_count = std::stoi(line.substr(line.find('<') + 3, line.size() - line.find('<') - 4));
                 this->Tick(universe, tick_count);
-                std::cout << universe;
                 break;
             }
             case EXIT:
