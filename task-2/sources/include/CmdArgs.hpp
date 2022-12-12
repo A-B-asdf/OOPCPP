@@ -1,6 +1,8 @@
 #include <getopt.h>
 #include <string>
 #include <iostream>
+#include <vector>
+
 #pragma once
 
 typedef enum Modes {
@@ -10,10 +12,13 @@ typedef enum Modes {
 
 class CmdArgs {
 private:
-    int _iterations = 1;
+    int _iterations = -1;
     std::string _input_file = "";
     std::string _output_file = "";
     mode_type _mode = ONLINE;
+    
+    bool Check();
+
 public:
     CmdArgs() = default;
     CmdArgs(int argc, char* argv[]);
@@ -25,10 +30,8 @@ public:
 
     //void SetIterations(int);
     //void SetInputFile(std::string&);
-    //void SetOutputFile(std::string&);
+    void SetOutputFile(std::string&);
     //void SetMode(mode_type);
-
-    void SetDefaultInputFile();
 
     friend std::ostream& operator<<(std::ostream&, const CmdArgs&);
 };

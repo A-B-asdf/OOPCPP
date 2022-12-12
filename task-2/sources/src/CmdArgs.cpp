@@ -3,53 +3,78 @@
 CmdArgs::CmdArgs(int argc, char* argv[]) {
     const char *optstring = "i:m:f:o:";
     const struct option longopts[] = {
-        {"iterations",  required_argument, NULL, 'i'},
+        {"iterations",  optional_argument, NULL, 'i'},
         {"mode",        required_argument, NULL, 'm'},
-        {"filename",    required_argument, NULL, 'f'},
-        {"output",      required_argument, NULL, 'o'},
+        {"filename",    optional_argument, NULL, 'f'},
+        {"output",      optional_argument, NULL, 'o'},
         {NULL, 0, NULL, 0}
     };
     char opt_char;
     int longindex;
     extern char *optarg;
 
-    while ((opt_char = getopt_long(argc, argv, optstring, longopts, &longindex)) != -1) {
-        switch (opt_char) {  // todo: сделать обработку ошибки, пример "./task-2/bin/main -i 100500 -f input_lol -o -m 1984"
-            case 'i': {
-                try {
+    try {
+        while ((opt_char = getopt_long(argc, argv, optstring, longopts, &longindex)) != -1) {
+            switch (opt_char) {  // todo: отработать ситуации, когда пропущено значение
+                case 'i': {
                     this->_iterations = std::stoi(optarg);
+                    break;
                 }
-                catch (...) {  // todo
+                case 'o': {
+                    this->_output_file = optarg;
+                    break;
+                }
+                case 'f': {
+                    this->_input_file = optarg;
+                    break;
+                }
+                case 'm': {
+                    if (optarg == (std::string) "online") {
+                        this->_mode = ONLINE;
+                    }
+                    else if (optarg == (std::string) "offline") {
+                        this->_mode = OFFLINE;
+                    }
+                    else {
+                        throw;
+                    }
+                    break;
+                }
+                default: {
                     throw;
                 }
-                break;
-            }
-            case 'o': {
-                this->_output_file = optarg;
-                break;
-            }
-            case 'f': {
-                this->_input_file = optarg;
-                break;
-            }
-            case 'm': {
-                if (optarg == (std::string) "online") {
-                    this->_mode = ONLINE;
-                }
-                else if (optarg == (std::string) "offline") {
-                    this->_mode = OFFLINE;
-                }
-                else {
-                    std::cout << (std::string) "offline" << "\n" << optarg << "\n";
-                    throw std::exception();  // todo: exception
-                }
-                break;
-            }
-            default: {
-                throw std::exception();  // todo: exception
             }
         }
     }
+    catch (...) {
+        throw /*CmdArgsException(
+            "Incorrect arguments format",
+            (std::string) optarg,
+            opt_char
+        )*/;
+    }
+    this->Check();
+}
+
+bool CmdArgs::Check() {
+    if (this->GetMode() == ONLINE) {
+        ;
+    }
+    else if (this->GetMode() == OFFLINE) {
+        if (this->GetInputFile() == "") {
+            std::cout << "ex: no input file\n";
+            throw;
+        }
+        if (this->GetOutputFile() == "") {
+            std::cout << "ex: no output file\n";
+            throw;
+        }
+        if (this->GetIterations() == -1) {
+            std::cout << "ex: no iterations\n";
+            throw;
+        }
+    }
+    return true;
 }
 
 int CmdArgs::GetIterations() {
@@ -76,19 +101,15 @@ void CmdArgs::SetIterations(int iterations) {
 void CmdArgs::SetInputFile(std::string &input_file) {
     this->_input_file = input_file;
 }
-
+*/
 void CmdArgs::SetOutputFile(std::string &output_file) {
     this->_output_file = output_file;
 }
-
+/*
 void CmdArgs::SetMode(mode_type mode) {
     this->_mode = mode;
 }
 */
-
-void CmdArgs::SetDefaultInputFile() {
-    this->_input_file = "";
-}
 
 std::ostream& operator<<(std::ostream& o, const CmdArgs& args) {
     o << "iterations:   " << args._iterations   << "\n"
