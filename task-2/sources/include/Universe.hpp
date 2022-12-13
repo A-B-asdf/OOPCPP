@@ -18,7 +18,7 @@
 
 class Universe {
 private:
-    std::pair<int, int> _size = {50, 100};
+    std::pair<int, int> _size = {60, 100};
     std::set<int> _cells_number_to_born;
     std::set<int> _cells_number_to_stay;
     std::string _name = "Default";
@@ -48,7 +48,7 @@ public:
     void SetCell(int x, int y, bool is_alive);
     void SetFieldFromAliveCoords(std::vector<std::pair<int, int>>&);
 
-    void IncreaseIteration(int);
+    void Tick();
 
     void Save2File(std::string&);
 

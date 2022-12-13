@@ -13,18 +13,28 @@ typedef enum CMDLineTypes {
 } cmdlinetype;
 
 class GameController {
-private:
+protected:
+    Universe* _universe_ptr;
+    CmdArgs* _args_ptr;
 public:
-    void Tick(Universe&, int);
-    GameController() {}
+    GameController() = default;
+    GameController(Universe &universe, CmdArgs &args) :
+        _universe_ptr(&universe), _args_ptr(&args) {}
+
+    void SetUniverse(Universe &universe)    { _universe_ptr = &universe;    }
+    void SetArgs    (CmdArgs &args)         { _args_ptr     = &args;        }
+
     ~GameController() {}
+    void Tick();
 };
 
 class OnlineController : public GameController {
 private:
     cmdlinetype GetLineType(std::string&);
 public:
-    void Work(Universe&, CmdArgs &args);
+    OnlineController() = default;
+    OnlineController(Universe &universe, CmdArgs &args) : GameController(universe, args) {}
+    void Work();
     void PrintHelp();
 };
 
@@ -32,5 +42,7 @@ class OfflineController : public GameController {
 private:
     
 public:
-    void Work(Universe&, CmdArgs&);
+    OfflineController() = default;
+    OfflineController(Universe &universe, CmdArgs &args) : GameController(universe, args) {}
+    void Work();
 };

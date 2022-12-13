@@ -4,18 +4,8 @@
 #include <chrono>
 #include <thread>
 
-void GameController::Tick(Universe &universe, int tick_count) {
-    for (int i = 0; i < tick_count; ++ i) {
-        std::vector<std::pair<int, int>> next_alive_cells = universe.GetNextAliveCells();
-        universe.SetFieldFromAliveCoords(next_alive_cells);
-        universe.IncreaseIteration(1);
-        std::this_thread::sleep_for(std::chrono::milliseconds(500));
-        std::cout << universe;
-    }
-}
-
-void OnlineController::Work(Universe &universe, CmdArgs &args) {
-    std::cout << universe;
+void OnlineController::Work() {
+    std::cout << *_universe_ptr;
     PrintHelp();
     bool break_cmd = false;
     while (!break_cmd) {
@@ -24,19 +14,26 @@ void OnlineController::Work(Universe &universe, CmdArgs &args) {
         switch (this->GetLineType(line)) {
             case DUMP: {
                 if (line.find('<') != std::string::npos) {
-                    std::string output_file = DEFAULT_OUTPUT_DIR + line.substr(line.find('<') + 1, line.size() - line.find('<') - 2);
-                    args.SetOutputFile(output_file);
+                    std::string output_file = (std::string) DEFAULT_OUTPUT_DIR + line.substr(line.find('<') + 1, line.size() - line.find('<') - 2);
+                    _args_ptr->SetOutputFile(output_file);
                 }
-                if (args.GetOutputFile().size() == 0) {
+                if (_args_ptr->GetOutputFile().size() == 0) {
                     std::cout << "Incorrect output file ^ ^";
                 }
-                std::cout << "Universe 'll be saved into file \"" << args.GetOutputFile() << "\" ^ ^\n";
-                universe.Save2File(args.GetOutputFile());
+                std::cout << "Universe 'll be saved into file \"" << _args_ptr->GetOutputFile() << "\" ^ ^\n";
+                _universe_ptr->Save2File(_args_ptr->GetOutputFile());
                 break;
             }
             case TICK: {
-                int tick_count = std::stoi(line.substr(line.find('<') + 3, line.size() - line.find('<') - 4));
-                this->Tick(universe, tick_count);
+                int tick_count = 1;
+                if (line.find('<') != std::string::npos) {
+                    tick_count = std::stoi(line.substr(line.find('<') + 3, line.size() - line.find('<') - 4));
+                }
+                for (int i = 0; i < tick_count; ++i) {
+                    std::this_thread::sleep_for(std::chrono::milliseconds(200));
+                    _universe_ptr->Tick();
+                    std::cout << *_universe_ptr;
+                }
                 break;
             }
             case EXIT:
@@ -83,7 +80,10 @@ void OnlineController::PrintHelp() {
     << "help - see this text again ^ ^" << std::endl;
 }
 
-void OfflineController::Work(Universe &universe, CmdArgs &args) {
-    this->Tick(universe, args.GetIterations());
-    universe.Save2File(args.GetOutputFile());
+void OfflineController::Work() {
+    for (int i = 0; i < _args_ptr->GetIterations(); ++i) {
+        _universe_ptr->Tick();
+    }
+    std::string filename = (std::string) DEFAULT_OUTPUT_DIR + _args_ptr->GetOutputFile();
+    _universe_ptr->Save2File(filename);
 }

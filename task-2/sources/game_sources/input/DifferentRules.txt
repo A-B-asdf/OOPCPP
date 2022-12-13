@@ -1,0 +1,4 @@
+#Life 1.06
+#N DifferentRules
+#R B12/S1234
+0 0

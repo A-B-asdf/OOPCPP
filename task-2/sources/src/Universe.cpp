@@ -109,8 +109,10 @@ void Universe::SetFieldFromAliveCoords(std::vector<std::pair<int, int>> &alive_c
     }
 }
 
-void Universe::IncreaseIteration(int a) {
-    this->_iteration += a;
+void Universe::Tick() {
+    std::vector<std::pair<int, int>> next_alive_cells = GetNextAliveCells();
+    SetFieldFromAliveCoords(next_alive_cells);
+    ++this->_iteration;
 }
 
 void Universe::Save2File(std::string &filename) {
@@ -182,6 +184,7 @@ void UniverseParser::SetDefaultInputFile() {
     names.emplace_back("Piorbital");
     std::srand(time(NULL));
     this->_input_file = (std::string) DEFAULT_INPUT_DIR + names.at(std::rand() % names.size()) + ".txt";
+    std::cout << "Input file was set bu default:\n\t" << this->_input_file << '\n';
 }
 
 void UniverseParser::AddNumber2Born(int a, Universe &universe) {

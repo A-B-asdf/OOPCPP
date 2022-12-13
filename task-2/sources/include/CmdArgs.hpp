@@ -21,6 +21,16 @@ private:
 
 public:
     CmdArgs() = default;
+    CmdArgs(
+            int iterations,
+            std::string &input_file,
+            std::string &output_file,
+            mode_type mode
+        ) : 
+        _iterations(iterations),
+        _input_file(input_file),
+        _output_file(output_file),
+        _mode(mode) {}
     CmdArgs(int argc, char* argv[]);
 
     int GetIterations();
