@@ -25,7 +25,6 @@ public:
     void SetArgs    (CmdArgs &args)         { _args_ptr     = &args;        }
 
     ~GameController() {}
-    void Tick();
 };
 
 class OnlineController : public GameController {
