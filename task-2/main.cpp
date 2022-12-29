@@ -1,5 +1,6 @@
 #include "CmdArgs.hpp"
 #include "Universe.hpp"
+#include "UniverseParser.hpp"
 #include "Controllers.hpp"
 
 int main(int argc, char *argv[]) {
