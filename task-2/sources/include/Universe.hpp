@@ -36,8 +36,7 @@ public:
         _cells_number_to_stay(cells_number_to_stay),
         _name(name) {}
  
-    int RowCount();
-    int ColCount();
+    std::pair<int, int> GetSize();
     bool IsCellAlive(int x, int y);
     bool IsCellAliveNext(int x, int y);
     std::vector<std::pair<int, int>> GetNextAliveCells();

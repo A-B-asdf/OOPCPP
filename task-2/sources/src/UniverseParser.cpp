@@ -107,8 +107,8 @@ void UniverseParser::ParseCells(std::string &line, std::ifstream &in, Universe &
             throw;
         }
         universe.SetCell(
-            coords.first + universe.RowCount() / 2, 
-            coords.second + universe.ColCount() / 2, 
+            coords.first + universe.GetSize().first / 2, 
+            coords.second + universe.GetSize().second / 2, 
             true
         );
         ++line_counter;

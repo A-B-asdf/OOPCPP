@@ -54,8 +54,8 @@ bool Universe::IsCellAliveNext(int x, int y) {
 
 std::vector<std::pair<int, int>> Universe::GetNextAliveCells(){
     std::vector<std::pair<int, int>> next_alive_cells;
-    for (int x = 0; x < this->RowCount(); ++x) {
-        for (int y = 0; y < this->ColCount(); ++y) {
+    for (int x = 0; x < this->GetSize().first; ++x) {
+        for (int y = 0; y < this->GetSize().second; ++y) {
             if (this->IsCellAliveNext(x, y)) {
                 next_alive_cells.emplace_back();  // todo: говнокод
                 next_alive_cells.at(next_alive_cells.size() - 1).first = x;
@@ -87,17 +87,13 @@ void Universe::SetName(const std::string &name) {
     this->_name = name;
 }
 
-int Universe::RowCount() {
-    return this->_size.first;
-}
-
-int Universe::ColCount() {
-    return this->_size.second;
+std::pair<int, int> Universe::GetSize() {
+    return this->_size;
 }
 
 void Universe::SetFieldFromAliveCoords(std::vector<std::pair<int, int>> &alive_cells) {
-    for (int x = 0; x < this->RowCount(); ++x) {
-        for (int y = 0; y < this->ColCount(); ++y) {
+    for (int x = 0; x < this->GetSize().first; ++x) {
+        for (int y = 0; y < this->GetSize().second; ++y) {
             bool is_alive = false;
             for (auto p : alive_cells) {
                 if (p.first == x && p.second == y) { // todo: говнокод
@@ -136,7 +132,7 @@ void Universe::Save2File(std::string &filename) {
     for (int x = 0; x < this->_size.first; ++x) {
         for (int y = 0; y < this->_size.second; ++y) {
             if (this->_field.at(x).at(y).IsAlive()) {
-                out << x - this->RowCount() / 2 << " " << y - this->ColCount() / 2  << "\n";
+                out << x - this->GetSize().first / 2 << " " << y - this->GetSize().second / 2  << "\n";
             }
         }
     }
