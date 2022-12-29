@@ -20,7 +20,7 @@ TEST(main_test, test1) {
     OfflineController controller = OfflineController(universe, args);
     //////////////////////// ACT ////////////////////////
     for (int i = 0; i < 4; ++i) {
-        universe.Tick();
+        controller.Tick();
     }
     //////////////////////// ASSERT ////////////////////////
     std::string correct_field = 

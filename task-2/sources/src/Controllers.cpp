@@ -4,6 +4,68 @@
 #include <chrono>
 #include <thread>
 
+bool GameController::IsCellAliveNext(int x, int y) {
+    int sum = 0;
+    if (_universe_ptr->IsCellAlive(x    , y - 1)) ++sum;
+    if (_universe_ptr->IsCellAlive(x    , y + 1)) ++sum;
+    if (_universe_ptr->IsCellAlive(x - 1, y    )) ++sum;
+    if (_universe_ptr->IsCellAlive(x - 1, y - 1)) ++sum;
+    if (_universe_ptr->IsCellAlive(x - 1, y + 1)) ++sum;
+    if (_universe_ptr->IsCellAlive(x + 1, y    )) ++sum;
+    if (_universe_ptr->IsCellAlive(x + 1, y + 1)) ++sum;
+    if (_universe_ptr->IsCellAlive(x + 1, y - 1)) ++sum;
+    if (_universe_ptr->IsCellAlive(x, y)) {
+        for (int n : _universe_ptr->GetRulesStay()) {
+            if (n == sum) {
+                return true;
+            }
+        }
+        return false;
+    }
+    else {
+        for (int n : _universe_ptr->GetRulesBorn()) {
+            if (n == sum) {
+                return true;
+            }
+        }
+        return false;
+    }
+}
+
+std::vector<std::pair<int, int>> GameController::GetNextAliveCells() {
+    std::vector<std::pair<int, int>> next_alive_cells;
+    for (int x = 0; x < _universe_ptr->GetSize().first; ++x) {
+        for (int y = 0; y < _universe_ptr->GetSize().second; ++y) {
+            if (this->IsCellAliveNext(x, y)) {
+                next_alive_cells.emplace_back();  // todo: говнокод
+                next_alive_cells.at(next_alive_cells.size() - 1).first = x;
+                next_alive_cells.at(next_alive_cells.size() - 1).second = y;
+            }
+        }
+    }
+    return next_alive_cells;
+}
+
+void GameController::SetFieldFromAliveCoords(std::vector<std::pair<int, int>> &alive_cells) {
+    for (int x = 0; x < _universe_ptr->GetSize().first; ++x) {
+        for (int y = 0; y < _universe_ptr->GetSize().second; ++y) {
+            bool is_alive = false;
+            for (auto p : alive_cells) {
+                if (p.first == x && p.second == y) { // todo: говнокод
+                    is_alive = true;
+                }
+            }
+            _universe_ptr->SetCell(x, y, is_alive);
+        }
+    }
+}
+
+void GameController::Tick() {
+    std::vector<std::pair<int, int>> next_alive_cells = GetNextAliveCells();
+    SetFieldFromAliveCoords(next_alive_cells);
+    _universe_ptr->IncreaseIteration();
+}
+
 void OnlineController::Work() {
     std::cout << *_universe_ptr;
     PrintHelp();
@@ -31,7 +93,7 @@ void OnlineController::Work() {
                 }
                 for (int i = 0; i < tick_count; ++i) {
                     std::this_thread::sleep_for(std::chrono::milliseconds(200));
-                    _universe_ptr->Tick();
+                    Tick();
                     std::cout << *_universe_ptr;
                 }
                 break;
@@ -82,7 +144,7 @@ void OnlineController::PrintHelp() {
 
 void OfflineController::Work() {
     for (int i = 0; i < _args_ptr->GetIterations(); ++i) {
-        _universe_ptr->Tick();
+        Tick();
     }
     std::string filename = (std::string) DEFAULT_OUTPUT_DIR + _args_ptr->GetOutputFile();
     _universe_ptr->Save2File(filename);

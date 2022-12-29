@@ -24,6 +24,12 @@ public:
     void SetUniverse(Universe &universe)    { _universe_ptr = &universe;    }
     void SetArgs    (CmdArgs &args)         { _args_ptr     = &args;        }
 
+    bool IsCellAliveNext(int x, int y);
+    std::vector<std::pair<int, int>> GetNextAliveCells();
+    void SetFieldFromAliveCoords(std::vector<std::pair<int, int>> &alive_cells);
+
+    void Tick();
+
     ~GameController() {}
 };
 
@@ -43,5 +49,6 @@ private:
 public:
     OfflineController() = default;
     OfflineController(Universe &universe, CmdArgs &args) : GameController(universe, args) {}
+
     void Work();
 };

@@ -38,20 +38,20 @@ public:
  
     std::pair<int, int> GetSize();
     bool IsCellAlive(int x, int y);
-    bool IsCellAliveNext(int x, int y);
-    std::vector<std::pair<int, int>> GetNextAliveCells();
     
     void SetRules(const std::set<int>&, const std::set<int>&);
     void SetName(const std::string&);
     void SetSize(std::pair<int, int> &size);
     void SetCell(int x, int y, bool is_alive);
-    void SetFieldFromAliveCoords(std::vector<std::pair<int, int>>&);
 
-    void Tick();
+    std::string GetName();
+    std::set<int> GetRulesStay();
+    std::set<int> GetRulesBorn();
+    void IncreaseIteration();
 
-    void Save2File(std::string&);
+    void Save2File(std::string&);  // todo: в клас утилс
 
-    friend class UniverseParser;
+    friend class UniverseParser;  // todo: можно ли убрать френд?
     friend std::ostream& operator<<(std::ostream&, const Universe&);
 };
 
