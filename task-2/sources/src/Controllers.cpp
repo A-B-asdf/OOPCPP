@@ -4,6 +4,14 @@
 #include <chrono>
 #include <thread>
 
+void GameController::AddNumber2Born(const int a) {
+    this->_rules.born.insert(a);
+}
+
+void GameController::AddNumber2Stay(const int a) {
+    this->_rules.stay.insert(a);
+}
+
 bool GameController::IsCellAliveNext(int x, int y) {
     int sum = 0;
     if (_universe_ptr->IsCellAlive(x    , y - 1)) ++sum;
@@ -15,7 +23,7 @@ bool GameController::IsCellAliveNext(int x, int y) {
     if (_universe_ptr->IsCellAlive(x + 1, y + 1)) ++sum;
     if (_universe_ptr->IsCellAlive(x + 1, y - 1)) ++sum;
     if (_universe_ptr->IsCellAlive(x, y)) {
-        for (int n : _universe_ptr->GetRulesStay()) {
+        for (int n : this->_rules.stay) {
             if (n == sum) {
                 return true;
             }
@@ -23,7 +31,7 @@ bool GameController::IsCellAliveNext(int x, int y) {
         return false;
     }
     else {
-        for (int n : _universe_ptr->GetRulesBorn()) {
+        for (int n : this->_rules.born) {
             if (n == sum) {
                 return true;
             }
@@ -63,11 +71,60 @@ void GameController::SetFieldFromAliveCoords(std::vector<std::pair<int, int>> &a
 void GameController::Tick() {
     std::vector<std::pair<int, int>> next_alive_cells = GetNextAliveCells();
     SetFieldFromAliveCoords(next_alive_cells);
-    _universe_ptr->IncreaseIteration();
+    ++_iteration;
+}
+
+void GameController::Print() {
+    std::cout << "Name: " << _universe_ptr->GetName() << "\n";
+    std::cout << "Rules: B";
+    for (int num : _rules.born) {
+        std::cout << num;
+    }
+    std::cout << "/S";
+    for (int num : _rules.stay) {
+        std::cout << num;
+    }
+    std::cout << "\n";
+    std::cout << "Iteration: " << _iteration << "\n";
+    for (int x = 0; x < _universe_ptr->GetSize().first; ++x) {
+        for (int y = 0; y < _universe_ptr->GetSize().second; ++y) {
+            std::cout << ((_universe_ptr->IsCellAlive(x, y)) ? '*' : ':');
+        }
+        std::cout << "\n";
+    }
+}
+
+void GameController::Save2File(std::string &filename) {
+    std::ofstream out;
+    out.open(filename, std::ios::out);
+    if (!out.is_open()) {
+        std::cout << "ex: bad output file\n";
+        throw;
+    }
+    out << "#Life 1.06\n";
+    out << "#N " << _universe_ptr->GetName() << "\n";
+    out << "#R B";
+    for (int num : this->_rules.born) {
+        out << num;
+    }
+    out << "/S";
+    for (int num : this->_rules.stay) {
+        out << num;
+    }
+    out << "\n";
+    for (int x = 0; x < _universe_ptr->GetSize().first; ++x) {
+        for (int y = 0; y < _universe_ptr->GetSize().second; ++y) {
+            if (_universe_ptr->IsCellAlive(x, y)) {
+                out << x - _universe_ptr->GetSize().first / 2 << " " 
+                    << y - _universe_ptr->GetSize().second / 2  << "\n";
+            }
+        }
+    }
+    out.close();
 }
 
 void OnlineController::Work() {
-    std::cout << *_universe_ptr;
+    Print();
     PrintHelp();
     bool break_cmd = false;
     while (!break_cmd) {
@@ -83,7 +140,7 @@ void OnlineController::Work() {
                     std::cout << "Incorrect output file ^ ^";
                 }
                 std::cout << "Universe 'll be saved into file \"" << _args_ptr->GetOutputFile() << "\" ^ ^\n";
-                _universe_ptr->Save2File(_args_ptr->GetOutputFile());
+                Save2File(_args_ptr->GetOutputFile());
                 break;
             }
             case TICK: {
@@ -94,7 +151,7 @@ void OnlineController::Work() {
                 for (int i = 0; i < tick_count; ++i) {
                     std::this_thread::sleep_for(std::chrono::milliseconds(200));
                     Tick();
-                    std::cout << *_universe_ptr;
+                    Print();
                 }
                 break;
             }
@@ -107,7 +164,7 @@ void OnlineController::Work() {
                 break;
             }
             default: {
-                std::cout << "wtf&\nHere is text that may help u:\n";
+                std::cout << "Idk wym _;;\nHere is text that may help u:\n";
                 this->PrintHelp();
                 break;
             }
@@ -147,5 +204,5 @@ void OfflineController::Work() {
         Tick();
     }
     std::string filename = (std::string) DEFAULT_OUTPUT_DIR + _args_ptr->GetOutputFile();
-    _universe_ptr->Save2File(filename);
+    Save2File(filename);
 }

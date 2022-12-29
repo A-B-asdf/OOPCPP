@@ -7,6 +7,7 @@
 #include "CmdArgs.hpp"
 #include "Cell.hpp"
 #include "Universe.hpp"
+#include "Controllers.hpp"
 
 #ifndef DEFAULT_INPUT_DIR
 #define DEFAULT_INPUT_DIR ""
@@ -21,16 +22,14 @@ class UniverseParser {
 private:
     std::string _input_file;
     void SetDefaultInputFile();
-    void AddNumber2Born(int, Universe&);
-    void AddNumber2Stay(int, Universe&);
 
     void HandleFormatLine(std::string&, std::ifstream&);
     void HandleNameLine(std::string&, std::ifstream&, Universe&);
-    void HandleRulesLine(std::string&, std::ifstream&, Universe&);
+    void HandleRulesLine(std::string&, std::ifstream&, GameController&);
     void ParseCells(std::string&, std::ifstream&, Universe&);
 public:
     UniverseParser() = default;
     UniverseParser(CmdArgs&);
 
-    void Parse(Universe&);
+    void Parse(Universe&, GameController &controller);
 };

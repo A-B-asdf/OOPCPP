@@ -22,18 +22,10 @@ void UniverseParser::SetDefaultInputFile() {
     names.emplace_back("Piorbital");
     std::srand(time(NULL));
     this->_input_file = (std::string) DEFAULT_INPUT_DIR + names.at(std::rand() % names.size()) + ".txt";
-    std::cout << "Input file was set bu default:\n\t" << this->_input_file << '\n';
+    std::cout << "Input file was set bu default: " << this->_input_file << '\n';
 }
 
-void UniverseParser::AddNumber2Born(int a, Universe &universe) {
-    universe._cells_number_to_born.insert(a);
-}
-
-void UniverseParser::AddNumber2Stay(int a, Universe &universe) {
-    universe._cells_number_to_stay.insert(a);
-}
-
-void UniverseParser::Parse(Universe &universe) {
+void UniverseParser::Parse(Universe &universe, GameController &controller) {
     std::ifstream in;
     std::string line;
     in.open(this->_input_file, std::ios::in);
@@ -47,7 +39,7 @@ void UniverseParser::Parse(Universe &universe) {
     }
     HandleFormatLine(line, in);
     HandleNameLine(line, in, universe);
-    HandleRulesLine(line, in, universe);
+    HandleRulesLine(line, in, controller);
     ParseCells(line, in, universe);
     in.close();    
 }
@@ -71,7 +63,7 @@ void UniverseParser::HandleNameLine(std::string &line, std::ifstream &in, Univer
     universe.SetName(match[1]);
 }
 
-void UniverseParser::HandleRulesLine(std::string &line, std::ifstream &in, Universe &universe) {
+void UniverseParser::HandleRulesLine(std::string &line, std::ifstream &in, GameController &controller) {
     std::getline(in, line);  // third line - Rules
     std::regex b_rgx("#R B(\\d+)/S\\d+");
     std::regex s_rgx("#R B\\d+/S(\\d+)");
@@ -85,11 +77,11 @@ void UniverseParser::HandleRulesLine(std::string &line, std::ifstream &in, Unive
     else {
         for (int i = 0; i < b_match[1].length(); ++i) {
             int new_num = b_match[1].str()[i] - '0';
-            this->AddNumber2Born(new_num, universe);
+            controller.AddNumber2Born(new_num);
         }
         for (int i = 0; i < s_match[1].length(); ++i) {
             int new_num = s_match[1].str()[i] - '0';
-            this->AddNumber2Stay(new_num, universe);
+            controller.AddNumber2Stay(new_num);
         }
     };
 }

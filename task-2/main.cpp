@@ -9,8 +9,8 @@ int main(int argc, char *argv[]) {
     Universe universe;
     if (args.GetMode() == ONLINE) {
         UniverseParser parser = UniverseParser(args);
-        parser.Parse(universe);
         OnlineController controller = OnlineController(universe, args);
+        parser.Parse(universe, controller);
         controller.Work();
     }
     else if (args.GetMode() == OFFLINE) {
@@ -19,8 +19,8 @@ int main(int argc, char *argv[]) {
         }
         else {
             UniverseParser parser = UniverseParser(args);
-            parser.Parse(universe);
             OfflineController controller = OfflineController(universe, args);
+            parser.Parse(universe, controller);
             controller.Work();
         }
     }

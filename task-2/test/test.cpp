@@ -16,8 +16,8 @@ TEST(main_test, test1) {
     Universe universe = Universe();
     std::pair<int, int> size = {10, 10};
     universe.SetSize(size);
-    parser.Parse(universe);
     OfflineController controller = OfflineController(universe, args);
+    parser.Parse(universe, controller);
     //////////////////////// ACT ////////////////////////
     for (int i = 0; i < 4; ++i) {
         controller.Tick();
