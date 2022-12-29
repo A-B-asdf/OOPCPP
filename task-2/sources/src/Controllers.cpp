@@ -74,7 +74,7 @@ void GameController::Tick() {
     ++_iteration;
 }
 
-void GameController::Print() {
+void GameController::PrintUniverse() {
     std::cout << "Name: " << _universe_ptr->GetName() << "\n";
     std::cout << "Rules: B";
     for (int num : _rules.born) {
@@ -88,7 +88,7 @@ void GameController::Print() {
     std::cout << "Iteration: " << _iteration << "\n";
     for (int x = 0; x < _universe_ptr->GetSize().first; ++x) {
         for (int y = 0; y < _universe_ptr->GetSize().second; ++y) {
-            std::cout << ((_universe_ptr->IsCellAlive(x, y)) ? '*' : ':');
+            std::cout << ((_universe_ptr->IsCellAlive(x, y)) ? '*' : '.');
         }
         std::cout << "\n";
     }
@@ -124,7 +124,7 @@ void GameController::Save2File(std::string &filename) {
 }
 
 void OnlineController::Work() {
-    Print();
+    PrintUniverse();
     PrintHelp();
     bool break_cmd = false;
     while (!break_cmd) {
@@ -151,7 +151,7 @@ void OnlineController::Work() {
                 for (int i = 0; i < tick_count; ++i) {
                     std::this_thread::sleep_for(std::chrono::milliseconds(200));
                     Tick();
-                    Print();
+                    PrintUniverse();
                 }
                 break;
             }

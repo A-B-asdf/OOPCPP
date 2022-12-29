@@ -40,7 +40,7 @@ public:
 
     void Tick();
 
-    void Print();
+    void PrintUniverse();
     void Save2File(std::string &filename);
 
     ~GameController() {}
