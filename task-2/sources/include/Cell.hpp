@@ -1,5 +1,5 @@
-#include <ostream>
 #pragma once
+#include <ostream>
 
 class Cell {
 private:

@@ -1,9 +1,9 @@
+#pragma once
+
 #include <getopt.h>
 #include <string>
 #include <iostream>
 #include <vector>
-
-#pragma once
 
 typedef enum Modes {
         ONLINE = 0

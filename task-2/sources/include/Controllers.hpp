@@ -1,11 +1,11 @@
+#pragma once
+
 #include <regex>
 #include <fstream>  // todo: убрать
 #include <iostream>
 #include "Cell.hpp"
 #include "Universe.hpp"
 #include "Utils.hpp"
-
-#pragma once
 
 typedef enum CMDLineTypes {
         DUMP = 0
