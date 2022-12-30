@@ -16,6 +16,11 @@
 #define DEFAULT_OUTPUT_DIR ""
 #endif
 
+struct Rules {
+    std::set<int> born;
+    std::set<int> stay;
+};
+
 class Universe {
 private:
     std::pair<int, int> _size = {60, 100};
@@ -29,7 +34,6 @@ public:
         _size(size), 
         _name(name) {}
  
-    std::pair<int, int> GetSize();
     bool IsCellAlive(int x, int y);
     
     void SetName(const std::string&);
@@ -37,5 +41,6 @@ public:
     void SetCell(int x, int y, bool is_alive);
 
     std::string GetName();
+    std::pair<int, int> GetSize();
 
 };

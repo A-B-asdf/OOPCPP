@@ -1,8 +1,9 @@
 #include <regex>
-#include <fstream>
+#include <fstream>  // todo: убрать
 #include <iostream>
 #include "Cell.hpp"
 #include "Universe.hpp"
+#include "Utils.hpp"
 
 #pragma once
 
@@ -19,10 +20,8 @@ class GameController {
 protected:
     Universe* _universe_ptr;
     CmdArgs* _args_ptr;
-    struct Rules {
-        std::set<int> born;
-        std::set<int> stay;
-    } _rules;
+    Utils* _utils_ptr;
+    struct Rules _rules;
     int _iteration = 0;
 public:
     GameController() = default;
@@ -39,9 +38,6 @@ public:
     void SetFieldFromAliveCoords(std::vector<std::pair<int, int>> &alive_cells);
 
     void Tick();
-
-    void PrintUniverse();
-    void Save2File(std::string &filename);
 
     ~GameController() {}
 };
