@@ -75,7 +75,7 @@ void GameController::Tick() {
 }
 
 void OnlineController::Work() {
-    _utils_ptr->PrintUniverse(_universe_ptr, _rules, _iteration);
+    _utils_ptr->PrintUniverse(*_universe_ptr, _rules, _iteration);
     PrintHelp();
     bool break_cmd = false;
     while (!break_cmd) {
@@ -91,7 +91,7 @@ void OnlineController::Work() {
                     std::cout << "Incorrect output file ^ ^";
                 }
                 std::cout << "Universe 'll be saved into file \"" << _args_ptr->GetOutputFile() << "\" ^ ^\n";
-                _utils_ptr->Save2File(_universe_ptr, _rules, _args_ptr->GetOutputFile());
+                _utils_ptr->Save2File(*_universe_ptr, _rules, _args_ptr->GetOutputFile());
                 break;
             }
             case TICK: {
@@ -102,7 +102,7 @@ void OnlineController::Work() {
                 for (int i = 0; i < tick_count; ++i) {
                     std::this_thread::sleep_for(std::chrono::milliseconds(200));
                     Tick();
-                    _utils_ptr->PrintUniverse(_universe_ptr, _rules, _iteration);
+                    _utils_ptr->PrintUniverse(*_universe_ptr, _rules, _iteration);
                 }
                 break;
             }
@@ -155,5 +155,5 @@ void OfflineController::Work() {
         Tick();
     }
     std::string filename = (std::string) DEFAULT_OUTPUT_DIR + _args_ptr->GetOutputFile();
-    _utils_ptr->Save2File(_universe_ptr, _rules, filename);
+    _utils_ptr->Save2File(*_universe_ptr, _rules, filename);
 }
