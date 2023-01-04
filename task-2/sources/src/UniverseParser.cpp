@@ -2,13 +2,13 @@
 #include <fstream>
 #include <regex>
 
-UniverseParser::UniverseParser(CmdArgs &args) {
-    if (args.GetInputFile() == "") {
+UniverseParser::UniverseParser(std::string &input_file) {
+    if (input_file == "") {
         this->SetDefaultInputFile();
     }
     else {
-        this->_input_file = (std::string) DEFAULT_INPUT_DIR + args.GetInputFile();
-    }
+        this->_input_file = (std::string) DEFAULT_INPUT_DIR + input_file;
+    }  // doesn't check if file is correct, it will be checked in function ParseFromFile
 }
 
 void UniverseParser::SetDefaultInputFile() {
@@ -25,9 +25,8 @@ void UniverseParser::SetDefaultInputFile() {
     std::cout << "Input file was set bu default: " << this->_input_file << '\n';
 }
 
-void UniverseParser::Parse(Universe &universe, GameController &controller) {
+void UniverseParser::ParseFromFile(Universe &universe, GameController &controller) {
     std::ifstream in;
-    std::string line;
     in.open(this->_input_file, std::ios::in);
     if (!in.is_open()) {
         std::cout << "ex: no input file\n";
@@ -37,14 +36,18 @@ void UniverseParser::Parse(Universe &universe, GameController &controller) {
         std::cout << "ex: input file is empty\n";
         throw;
     }
-    HandleFormatLine(line, in);
-    HandleNameLine(line, in, universe);
-    HandleRulesLine(line, in, controller);
-    ParseCells(line, in, universe);
-    in.close();    
+    HandleFormatLine(in);
+    std::string universe_name = HandleNameLine(in);
+    universe.SetName(universe_name);
+    struct Rules rules = HandleRulesLine(in);
+    controller.SetRules(rules);
+    std::vector<std::pair<int, int>> alive_cells = ParseCells(in);
+    universe.SetFieldFromAliveCoords(alive_cells);
+    in.close();
 }
 
-void UniverseParser::HandleFormatLine(std::string &line, std::ifstream &in) {
+void UniverseParser::HandleFormatLine(std::ifstream &in) {
+    std::string line;
     std::getline(in, line);
     if (line != "#Life 1.06") {
         std::cout << "ex: Incorrect file format string \n";
@@ -52,7 +55,8 @@ void UniverseParser::HandleFormatLine(std::string &line, std::ifstream &in) {
     }
 }
 
-void UniverseParser::HandleNameLine(std::string &line, std::ifstream &in, Universe &universe) {
+std::string UniverseParser::HandleNameLine(std::ifstream &in) {
+    std::string line;
     std::getline(in, line);
     std::regex rgx("#N (.+)");
     std::smatch match;
@@ -60,10 +64,11 @@ void UniverseParser::HandleNameLine(std::string &line, std::ifstream &in, Univer
         std::cout << "ex: Bad file format : name\n";
         throw;
     }
-    universe.SetName(match[1]);
+    return match[1];
 }
 
-void UniverseParser::HandleRulesLine(std::string &line, std::ifstream &in, GameController &controller) {
+struct Rules UniverseParser::HandleRulesLine(std::ifstream &in) {
+    std::string line;
     std::getline(in, line);  // third line - Rules
     std::regex b_rgx("#R B(\\d+)/S\\d+");
     std::regex s_rgx("#R B\\d+/S(\\d+)");
@@ -74,19 +79,21 @@ void UniverseParser::HandleRulesLine(std::string &line, std::ifstream &in, GameC
         std::cout << "ex: bad file format : rules\n";
         throw;
     }
-    else {
-        for (int i = 0; i < b_match[1].length(); ++i) {
-            int new_num = b_match[1].str()[i] - '0';
-            controller.AddNumber2Born(new_num);
-        }
-        for (int i = 0; i < s_match[1].length(); ++i) {
-            int new_num = s_match[1].str()[i] - '0';
-            controller.AddNumber2Stay(new_num);
-        }
-    };
+    struct Rules rules;
+    for (int i = 0; i < b_match[1].length(); ++i) {
+        int new_num = b_match[1].str()[i] - '0';
+        rules.born.insert(new_num);
+    }
+    for (int i = 0; i < s_match[1].length(); ++i) {
+        int new_num = s_match[1].str()[i] - '0';
+        rules.stay.insert(new_num);
+    }
+    return rules;
 }
 
-void UniverseParser::ParseCells(std::string &line, std::ifstream &in, Universe &universe) {
+std::vector<std::pair<int, int>> UniverseParser::ParseCells(std::ifstream &in) {
+    std::string line;
+    std::vector<std::pair<int, int>> alive_cells;
     int line_counter = 4;
     while (std::getline(in, line)) {
         std::pair<int, int> coords;
@@ -98,11 +105,10 @@ void UniverseParser::ParseCells(std::string &line, std::ifstream &in, Universe &
             std::cout << "ex: something wrong at line " << line_counter << "\n";
             throw;
         }
-        universe.SetCell(
-            coords.first + universe.GetSize().first / 2, 
-            coords.second + universe.GetSize().second / 2, 
-            true
-        );
+        alive_cells.emplace_back();
+        alive_cells.at(alive_cells.size() - 1).first = coords.first;
+        alive_cells.at(alive_cells.size() - 1).second = coords.second;
         ++line_counter;
     }
+    return alive_cells;
 }

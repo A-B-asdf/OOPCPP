@@ -12,12 +12,12 @@ TEST(main_test, test1) {
                            input_file, 
                            output_file, 
                            mode);
-    UniverseParser parser = UniverseParser(args);
+    UniverseParser parser = UniverseParser(args.GetInputFile());
     Universe universe = Universe();
     std::pair<int, int> size = {10, 10};
     universe.SetSize(size);
     OfflineController controller = OfflineController(universe, args);
-    parser.Parse(universe, controller);
+    parser.ParseFromFile(universe, controller);
     //////////////////////// ACT ////////////////////////
     for (int i = 0; i < 4; ++i) {
         controller.Tick();

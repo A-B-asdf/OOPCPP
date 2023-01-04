@@ -8,19 +8,25 @@ int main(int argc, char *argv[]) {
 
     Universe universe;
     if (args.GetMode() == ONLINE) {
-        UniverseParser parser = UniverseParser(args);
+        UniverseParser parser = UniverseParser(args.GetInputFile());
         OnlineController controller = OnlineController(universe, args);
-        parser.Parse(universe, controller);
+        parser.ParseFromFile(universe, controller);
         controller.Work();
     }
     else if (args.GetMode() == OFFLINE) {
         if (args.GetInputFile() == "") {
-            std::cout << "No input file, it's nessesary for offline mode";  // ex
+            std::cout << "No input file, it's nessesary for offline mode";
+        }
+        if (args.GetOutputFile() == "") {
+            std::cout << "No output file, it's nessesary for offline mode";
+        }
+        if (args.GetIterations() == -1) {
+            std::cout << "No iterations, it's nessesary for offline mode";
         }
         else {
-            UniverseParser parser = UniverseParser(args);
+            UniverseParser parser = UniverseParser(args.GetInputFile());
             OfflineController controller = OfflineController(universe, args);
-            parser.Parse(universe, controller);
+            parser.ParseFromFile(universe, controller);
             controller.Work();
         }
     }

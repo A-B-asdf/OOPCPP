@@ -32,6 +32,21 @@ void Universe::SetCell(int x, int y, bool is_alive) {
     return this->_field.at(x).at(y).SetAlive(is_alive);
 }
 
+void Universe::SetFieldFromAliveCoords(std::vector<std::pair<int, int>> &alive_cells) {
+    for (int x = 0; x < this->GetSize().first; ++x) {
+        for (int y = 0; y < this->GetSize().second; ++y) {
+            bool is_alive = false;
+            for (auto p : alive_cells) {
+                if (p.first  + GetSize().first  / 2 == x && 
+                    p.second + GetSize().second / 2 == y) {
+                    is_alive = true;
+                }
+            }
+            this->SetCell(x, y, is_alive);
+        }
+    }
+}
+
 void Universe::SetSize(std::pair<int, int> &size) {
     this->_size = size;
 }

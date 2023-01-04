@@ -1,7 +1,6 @@
 #pragma once
 
 #include <regex>
-#include <fstream>  // todo: убрать
 #include <iostream>
 #include "Cell.hpp"
 #include "Universe.hpp"
@@ -32,10 +31,10 @@ public:
     void SetArgs    (CmdArgs &args)         { _args_ptr     = &args;        }
     void AddNumber2Born(const int);
     void AddNumber2Stay(const int);
+    void SetRules(struct Rules&);
 
     bool IsCellAliveNext(int x, int y);
     std::vector<std::pair<int, int>> GetNextAliveCells();
-    void SetFieldFromAliveCoords(std::vector<std::pair<int, int>> &alive_cells);
 
     void Tick();
 

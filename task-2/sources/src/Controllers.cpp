@@ -12,6 +12,10 @@ void GameController::AddNumber2Stay(const int a) {
     this->_rules.stay.insert(a);
 }
 
+void GameController::SetRules(struct Rules &rules) {
+    this->_rules = rules;
+}
+
 bool GameController::IsCellAliveNext(int x, int y) {
     int sum = 0;
     if (_universe_ptr->IsCellAlive(x    , y - 1)) ++sum;
@@ -45,32 +49,18 @@ std::vector<std::pair<int, int>> GameController::GetNextAliveCells() {
     for (int x = 0; x < _universe_ptr->GetSize().first; ++x) {
         for (int y = 0; y < _universe_ptr->GetSize().second; ++y) {
             if (this->IsCellAliveNext(x, y)) {
-                next_alive_cells.emplace_back();  // todo: говнокод
-                next_alive_cells.at(next_alive_cells.size() - 1).first = x;
-                next_alive_cells.at(next_alive_cells.size() - 1).second = y;
+                next_alive_cells.emplace_back();
+                next_alive_cells.at(next_alive_cells.size() - 1).first  = x - _universe_ptr->GetSize().first  / 2;
+                next_alive_cells.at(next_alive_cells.size() - 1).second = y - _universe_ptr->GetSize().second / 2;
             }
         }
     }
     return next_alive_cells;
 }
 
-void GameController::SetFieldFromAliveCoords(std::vector<std::pair<int, int>> &alive_cells) {
-    for (int x = 0; x < _universe_ptr->GetSize().first; ++x) {
-        for (int y = 0; y < _universe_ptr->GetSize().second; ++y) {
-            bool is_alive = false;
-            for (auto p : alive_cells) {
-                if (p.first == x && p.second == y) { // todo: говнокод
-                    is_alive = true;
-                }
-            }
-            _universe_ptr->SetCell(x, y, is_alive);
-        }
-    }
-}
-
 void GameController::Tick() {
     std::vector<std::pair<int, int>> next_alive_cells = GetNextAliveCells();
-    SetFieldFromAliveCoords(next_alive_cells);
+    _universe_ptr->SetFieldFromAliveCoords(next_alive_cells);
     ++_iteration;
 }
 

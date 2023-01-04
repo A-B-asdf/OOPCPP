@@ -39,6 +39,7 @@ public:
     void SetName(const std::string&);
     void SetSize(std::pair<int, int> &size);
     void SetCell(int x, int y, bool is_alive);
+    void SetFieldFromAliveCoords(std::vector<std::pair<int, int>> &alive_cells);
 
     std::string GetName();
     std::pair<int, int> GetSize();

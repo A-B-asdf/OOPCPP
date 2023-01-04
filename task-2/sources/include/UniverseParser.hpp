@@ -23,13 +23,13 @@ private:
     std::string _input_file;
     void SetDefaultInputFile();
 
-    void HandleFormatLine(std::string&, std::ifstream&);
-    void HandleNameLine(std::string&, std::ifstream&, Universe&);
-    void HandleRulesLine(std::string&, std::ifstream&, GameController&);
-    void ParseCells(std::string&, std::ifstream&, Universe&);
+    void HandleFormatLine(std::ifstream&);
+    std::string HandleNameLine(std::ifstream&);
+    struct Rules HandleRulesLine(std::ifstream&);
+    std::vector<std::pair<int, int>> ParseCells(std::ifstream&);
 public:
     UniverseParser() = default;
-    UniverseParser(CmdArgs&);
+    UniverseParser(std::string &input_file);
 
-    void Parse(Universe&, GameController &controller);
+    void ParseFromFile(Universe&, GameController &controller);
 };

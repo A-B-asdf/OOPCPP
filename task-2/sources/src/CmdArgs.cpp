@@ -15,7 +15,7 @@ CmdArgs::CmdArgs(int argc, char* argv[]) {
 
     try {
         while ((opt_char = getopt_long(argc, argv, optstring, longopts, &longindex)) != -1) {
-            switch (opt_char) {  // todo: отработать ситуации, когда пропущено значение
+            switch (opt_char) {
                 case 'i': {
                     this->_iterations = std::stoi(optarg);
                     break;
